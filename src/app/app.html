@@ -330,7 +330,18 @@
       </div>
     </div>
   </div>
+  <button (click)="loadProducts()">
+  Load Products
+</button>
+@for (product of products(); track product.id) {
+  <p>
+    {{ product.name }} - ₹{{ product.price }}
+  </p>
+}
+<p>Loading: {{ loading() }}</p>
 </main>
+
+
 
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 <!-- * * * * * * * * * * * The content above * * * * * * * * * * * * -->
