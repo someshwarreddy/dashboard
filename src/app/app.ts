@@ -20,7 +20,22 @@ export class App {
   ProductSelectors.selectProducts
 ); 
 
+failerror = this.store.selectSignal(
+  ProductSelectors.selectError
+);
+
   loadProducts() {
     this.store.dispatch(ProductActions.loadProducts());
   }
+
+  searchProducts(query: string) {
+  if (!query.trim()) {
+    this.loadProducts();
+    return;
+  }
+
+  this.store.dispatch(
+    ProductActions.searchProducts({ query })
+  );
+}
 }

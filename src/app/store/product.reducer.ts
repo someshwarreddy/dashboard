@@ -34,4 +34,9 @@ export const productReducer = createReducer(
     loading: false,
     error
   }))
+,
+  on(ProductActions.searchProductsSuccess, (state, { products }) => ({
+  ...state,
+  products
+})),
 );
