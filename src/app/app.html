@@ -1,15 +1,9 @@
-
 <div class="product-container">
 
   <h1>Product Management</h1>
 
   <div class="search-box">
-    <input
-      type="text"
-      placeholder="Search products..."
-      #searchInput
-      (input)="searchProducts(searchInput.value)"
-    />
+    <input type="text" placeholder="Search products..." #searchInput (input)="searchProducts(searchInput.value)" />
 
     <button (click)="loadProducts()">
       Load All Products
@@ -17,23 +11,30 @@
   </div>
 
   @if (loading()) {
-    <p class="loading">Loading products...</p>
+  <p class="loading">Loading products...</p>
   }
 
   @if (failerror()) {
-    <p class="error">{{ failerror() }}</p>
+  <p class="error">{{ failerror() }}</p>
   }
 
   <div class="products">
 
     @for (product of products(); track product.id) {
-      <div class="product-card">
-        <h3>{{ product.title }}</h3>
-        <p>₹{{ product.price }}</p>
-      </div>
+    <div class="product-card" (click)="selectProduct(product.id)">
+      <h3>{{ product.title }}</h3>
+      <p>₹{{ product.price }}</p>
+    </div>
     }
 
   </div>
 
 </div>
+@if (selectedProduct(); as product) {
+  <div class="selected-product">
+    <h2>Selected Product</h2>
+    <p><strong>{{ product.title }}</strong></p>
+    <p>Price: ₹{{ product.price }}</p>
+  </div>
+}
 <router-outlet />

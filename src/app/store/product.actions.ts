@@ -1,6 +1,8 @@
 import { createAction, props } from '@ngrx/store';
 import { Product } from '../models/product';
 
+
+// load product actions
 export const loadProducts = createAction(
   '[Product] Load Products'
 );
@@ -15,6 +17,7 @@ export const loadProductsFailure = createAction(
   props<{ error: string }>()
 );
 
+// search product actions
 export const searchProducts = createAction(
   '[Product] Search Products',
   props<{ query: string }>()
@@ -28,4 +31,10 @@ export const searchProductsSuccess = createAction(
 export const searchProductsFailure = createAction(
   '[Product] Search Products Failure',
   props<{ error: string }>()
+);
+
+// select product action
+export const selectProduct = createAction(
+  '[Product] Select Product',
+  props<{ id: number }>()
 );

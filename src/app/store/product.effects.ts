@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, map, exhaustMap, of, switchMap , debounceTime, distinctUntilChanged} from 'rxjs';
+import { catchError, map, exhaustMap, of, switchMap, debounceTime, distinctUntilChanged } from 'rxjs';
 
 import * as ProductActions from './product.actions';
 import { ProductService } from '../services/product.service';
@@ -37,21 +37,27 @@ export class ProductEffects {
       )
     )
   );
-  
-searchProducts$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(ProductActions.searchProducts),
-    map(({ query }) => query),
-    debounceTime(500),
-        distinctUntilChanged(),
-    switchMap( query  =>
-      this.productService.searchProducts(query).pipe(
-        map(products =>
-          ProductActions.searchProductsSuccess({ products })
+
+  searchProducts$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProductActions.searchProducts),
+      map(({ query }) => query),
+      debounceTime(500),
+      distinctUntilChanged(),
+      switchMap(query =>
+        this.productService.searchProducts(query).pipe(
+          map(products =>
+            ProductActions.searchProductsSuccess({ products })
+          )
+        )
+      ),
+      catchError(error =>
+        of(
+          ProductActions.searchProductsFailure({
+            error: error.message
+          })
         )
       )
     )
   )
-);
-
 }

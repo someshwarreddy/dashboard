@@ -1,17 +1,14 @@
 import { createReducer, on } from '@ngrx/store';
 import * as ProductActions from './product.actions';
-import { Product } from '../models/product';
+import { Product, ProductState } from '../models/product';
 
-export interface ProductState {
-  products: Product[];
-  loading: boolean;
-  error: string | null;
-}
+
 
 export const initialState: ProductState = {
   products: [],
   loading: false,
-  error: null
+  error: null,
+   selectedProductId: null
 };
 
 export const productReducer = createReducer(
@@ -33,10 +30,27 @@ export const productReducer = createReducer(
     ...state,
     loading: false,
     error
-  }))
-,
+  })),
+
+  on(ProductActions.searchProducts, state => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+
   on(ProductActions.searchProductsSuccess, (state, { products }) => ({
-  ...state,
-  products
-})),
+    ...state,
+    products
+  })),
+
+  on(ProductActions.searchProductsFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+
+  // select product reducer
+  on(ProductActions.selectProduct, (state, { id }) => ({
+    ...state,
+    selectedProductId: id
+  }))
 );

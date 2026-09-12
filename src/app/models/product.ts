@@ -23,3 +23,9 @@ export interface ProductApiResponse {
   skip: number;
   limit: number;
 }
+export interface ProductState {
+  products: Product[];
+  loading: boolean;
+  error: string | null;
+   selectedProductId: number | null;
+}

@@ -41,6 +41,7 @@ searchProducts(query: string): Observable<Product[]> {
   return this.http
     .get<ProductApiResponse>(
       `https://dummyjson.com/products/search?q=${query}`
+      // `https://dummyjson.com/products-invalid/search?q=${query}`
     )
     .pipe(
       map(response => response.products)

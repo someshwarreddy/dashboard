@@ -17,25 +17,33 @@ export class App {
   );
 
   products = this.store.selectSignal(
-  ProductSelectors.selectProducts
-); 
+    ProductSelectors.selectProducts
+  );
 
-failerror = this.store.selectSignal(
-  ProductSelectors.selectError
-);
-
+  failerror = this.store.selectSignal(
+    ProductSelectors.selectError
+  );
+  selectedProduct = this.store.selectSignal(
+    ProductSelectors.selectSelectedProduct
+  );
   loadProducts() {
     this.store.dispatch(ProductActions.loadProducts());
   }
 
   searchProducts(query: string) {
-  if (!query.trim()) {
-    this.loadProducts();
-    return;
+    if (!query.trim()) {
+      this.loadProducts();
+      return;
+    }
+
+    this.store.dispatch(
+      ProductActions.searchProducts({ query })
+    );
   }
 
+  selectProduct(id: number) {
   this.store.dispatch(
-    ProductActions.searchProducts({ query })
+    ProductActions.selectProduct({ id })
   );
 }
 }
