@@ -60,4 +60,93 @@ export class ProductEffects {
       )
     )
   )
+  deleteProduct$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.deleteProduct),
+    exhaustMap(({ id }) =>
+      this.productService.deleteProduct(id).pipe(
+        map(() =>
+          ProductActions.deleteProductSuccess({ id })
+        ),
+        catchError(error =>
+          of(
+            ProductActions.deleteProductFailure({
+              error: error.message
+            })
+          )
+        )
+      )
+    )
+  )
+);
+updateProduct$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.updateProduct),
+    switchMap(({ product }) =>
+      this.productService.updateProduct(product).pipe(
+        map(updatedProduct =>
+          ProductActions.updateProductSuccess({
+            product: updatedProduct
+          })
+        ),
+        catchError(error =>
+          of(
+            ProductActions.updateProductFailure({
+              error: error.message
+            })
+          )
+        )
+      )
+    )
+  )
+);
+putProduct$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.putProduct),
+
+    switchMap(({ product }) =>
+      this.productService.putProduct(product).pipe(
+
+        map(updatedProduct =>
+          ProductActions.putProductSuccess({
+            product: updatedProduct
+          })
+        ),
+
+        catchError(error =>
+          of(
+            ProductActions.putProductFailure({
+              error: error.message
+            })
+          )
+        )
+      )
+    )
+  )
+);
+createProduct$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.createProduct),
+
+    switchMap(({ product }) =>
+      this.productService.createProduct(product).pipe(
+
+        map(createdProduct =>
+          ProductActions.createProductSuccess({
+            product: createdProduct
+          })
+        ),
+
+        catchError(error =>
+          of(
+            ProductActions.createProductFailure({
+              error: error.message
+            })
+          )
+        )
+
+      )
+    )
+  )
+);
 }

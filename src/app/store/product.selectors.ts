@@ -22,3 +22,12 @@ export const selectSelectedProduct = createSelector(
   (products, state) =>
     products.find(product => product.id === state.selectedProductId) ?? null
 );
+
+export const selectDeletingId = createSelector(
+  selectProductState,
+  state => state.deletingId
+);
+export const selectCreating = createSelector(
+  selectProductState,
+  state => state.creating
+);

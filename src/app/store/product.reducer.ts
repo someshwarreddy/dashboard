@@ -8,7 +8,9 @@ export const initialState: ProductState = {
   products: [],
   loading: false,
   error: null,
-   selectedProductId: null
+  selectedProductId: null,
+  deletingId: null,
+  creating: false
 };
 
 export const productReducer = createReducer(
@@ -52,5 +54,76 @@ export const productReducer = createReducer(
   on(ProductActions.selectProduct, (state, { id }) => ({
     ...state,
     selectedProductId: id
-  }))
+  })),
+  on(ProductActions.clearSelectedProduct, state => ({
+    ...state,
+    selectedProductId: null
+  })),
+
+  on(ProductActions.deleteProductSuccess, (state, { id }) => ({
+    ...state,
+    products: state.products.filter(product => product.id !== id),
+    selectedProductId:
+      state.selectedProductId === id
+        ? null
+        : state.selectedProductId,
+    deletingId: null
+  })),
+  on(ProductActions.deleteProductFailure, (state, { error }) => ({
+    ...state,
+    error,
+    deletingId: null
+  })),
+  on(ProductActions.deleteProduct, (state, { id }) => ({
+    ...state,
+    deletingId: id,
+    error: null
+  })),
+  on(ProductActions.updateProductSuccess, (state, { product }) => ({
+    ...state,
+    products: state.products.map(existingProduct =>
+      existingProduct.id === product.id
+        ? product
+        : existingProduct
+    ),
+    error: null
+  })),
+  on(ProductActions.updateProductFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+
+  on(ProductActions.putProductSuccess, (state, { product }) => ({
+    ...state,
+
+    products: state.products.map(existingProduct =>
+      existingProduct.id === product.id
+        ? product
+        : existingProduct
+    ),
+
+    error: null
+  })),
+
+  on(ProductActions.putProductFailure, (state, { error }) => ({
+    ...state,
+    error
+  })),
+  on(ProductActions.createProduct, state => ({
+  ...state,
+  creating: true,
+  error: null
+})),
+  on(ProductActions.createProductSuccess, (state, { product }) => ({
+  ...state,
+  products: [...state.products, product],
+  creating: false,
+  error: null
+})),
+
+on(ProductActions.createProductFailure, (state, { error }) => ({
+  ...state,
+  creating: false,
+  error
+})),
 );

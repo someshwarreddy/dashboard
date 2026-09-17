@@ -3,47 +3,38 @@ import { RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as ProductActions from './store/product.actions';
 import * as ProductSelectors from './store/product.selectors';
+import { Product } from './models/product';
+import { FormBuilder } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { ProductPage } from './pages/product-page/product-page';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet ,ProductPage, ReactiveFormsModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  protected readonly title = signal('enterprise-dashboard');
-  private store = inject(Store);
-  loading = this.store.selectSignal(
-    ProductSelectors.selectLoading
-  );
 
-  products = this.store.selectSignal(
-    ProductSelectors.selectProducts
-  );
+// createFormData() {
+//   const formData = new FormData();
 
-  failerror = this.store.selectSignal(
-    ProductSelectors.selectError
-  );
-  selectedProduct = this.store.selectSignal(
-    ProductSelectors.selectSelectedProduct
-  );
-  loadProducts() {
-    this.store.dispatch(ProductActions.loadProducts());
-  }
+//   formData.append(
+//     'title',
+//     this.productForm.value.title ?? ''
+//   );
 
-  searchProducts(query: string) {
-    if (!query.trim()) {
-      this.loadProducts();
-      return;
-    }
+//   formData.append(
+//     'price',
+//     String(this.productForm.value.price ?? '')
+//   );
 
-    this.store.dispatch(
-      ProductActions.searchProducts({ query })
-    );
-  }
+//   if (this.selectedFile) {
+//     formData.append('image', this.selectedFile);
+//   }
 
-  selectProduct(id: number) {
-  this.store.dispatch(
-    ProductActions.selectProduct({ id })
-  );
-}
+//   formData.forEach((value, key) => {
+//     console.log(key, value);
+//   });
+// }
+
 }

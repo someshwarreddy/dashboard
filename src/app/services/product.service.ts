@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { map, Observable, of, throwError } from 'rxjs';
-import { Product, ProductApiResponse, } from '../models/product';
+import { CreateProduct, Product, ProductApiResponse, } from '../models/product';
 import { HttpClient } from '@angular/common/http';
 @Service()
 export class ProductService {
@@ -29,22 +29,87 @@ export class ProductService {
 //       )
 //     );
 // }
+// getProducts(): Observable<Product[]> {
+//   return this.http.get<ProductApiResponse>(
+//     'https://dummyjson.com/products'
+//     //  'https://dummyjson.com/products-invalid'
+//   ).pipe(
+//     map(response => response.products)
+//   );
+// }
 getProducts(): Observable<Product[]> {
-  return this.http.get<ProductApiResponse>(
-    'https://dummyjson.com/products'
-    //  'https://dummyjson.com/products-invalid'
-  ).pipe(
-    map(response => response.products)
-  );
+  return this.http
+    .get<ProductApiResponse>('https://dummyjson.com/products')
+    .pipe(
+      map(response =>
+        response.products.map(product => ({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.thumbnail
+        }))
+      )
+    );
 }
+
+// searchProducts(query: string): Observable<Product[]> {
+//   return this.http
+//     .get<ProductApiResponse>(
+//       `https://dummyjson.com/products/search?q=${query}`
+//       // `https://dummyjson.com/products-invalid/search?q=${query}`
+//     )
+//     .pipe(
+//       map(response => response.products)
+//     );
+// }
 searchProducts(query: string): Observable<Product[]> {
   return this.http
     .get<ProductApiResponse>(
       `https://dummyjson.com/products/search?q=${query}`
-      // `https://dummyjson.com/products-invalid/search?q=${query}`
     )
     .pipe(
-      map(response => response.products)
+      map(response =>
+        response.products.map(product => ({
+          id: product.id,
+          title: product.title,
+          price: product.price,
+          image: product.thumbnail
+        }))
+      )
     );
+}
+
+deleteProduct(id: number): Observable<void> {
+  return this.http.delete<void>(
+    `https://dummyjson.com/products/${id}`
+  );
+}
+
+updateProduct(product: Product): Observable<Product> {
+  return this.http.patch<Product>(
+    `https://dummyjson.com/products/${product.id}`,
+    {
+      title: product.title,
+      price: product.price
+    }
+  );
+}
+putProduct(product: Product): Observable<Product> {
+  return this.http.put<Product>(
+    `https://dummyjson.com/products/${product.id}`,
+    product
+  );
+}
+createProduct(product: CreateProduct): Observable<Product> {
+  const formData = new FormData();
+
+  formData.append('title', product.title);
+  formData.append('price', String(product.price));
+  formData.append('image', product.image);
+
+  return this.http.post<Product>(
+    'https://dummyjson.com/products/add',
+    formData
+  );
 }
 }

@@ -1,0 +1,15 @@
+<div class="product-card">
+
+  <img
+    [src]="product().image"
+    [alt]="product().title"
+  />
+
+  <h3>{{ product().title }}</h3>
+
+  <p>₹{{ product().price }}</p>
+ <button (click)="delete.emit(product().id)">
+    Delete
+  </button>
+
+</div>
