@@ -1,5 +1,17 @@
-.products {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 15px;
+// .products {
+//   display: grid;
+//   grid-template-columns: repeat(3, 1fr);
+//   gap: 15px;
+// }
+
+:host {
+  display: block;
 }
+
+.products , .product-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
+}
+

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 
 @Component({
   selector: 'app-product-search',
@@ -6,4 +6,6 @@ import { Component } from '@angular/core';
   templateUrl: './product-search.html',
   styleUrl: './product-search.scss',
 })
-export class ProductSearch {}
+export class ProductSearch {
+  search = output<string>();
+}

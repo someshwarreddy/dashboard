@@ -9,5 +9,6 @@ import { ProductCard } from '../product-card/product-card';
 })
 export class ProductList {
   products = input.required<Product[]>();
-productDelete = output<number>();
+  productDelete = output<number>();
+  selectProduct = output<number>();
 }

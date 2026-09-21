@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { map, Observable, of, throwError } from 'rxjs';
-import { CreateProduct, Product, ProductApiResponse, } from '../models/product';
+import { CreateProduct, Product, ProductApiResponse, ProductApi } from '../models/product';
 import { HttpClient } from '@angular/common/http';
 @Service()
 export class ProductService {
@@ -110,6 +110,18 @@ createProduct(product: CreateProduct): Observable<Product> {
   return this.http.post<Product>(
     'https://dummyjson.com/products/add',
     formData
+  );
+}
+getProductById(id: number): Observable<Product> {
+  return this.http.get<ProductApi>(
+    `https://dummyjson.com/products/${id}`
+  ).pipe(
+    map(product => ({
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      image: product.thumbnail
+    }))
   );
 }
 }

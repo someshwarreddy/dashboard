@@ -99,3 +99,18 @@ export const createProductFailure = createAction(
   '[Product] Create Product Failure',
   props<{ error: string }>()
 );
+
+// single load product actions
+export const loadProduct = createAction(
+  '[Product] Load Product',
+  props<{ id: number }>()
+);
+export const loadProductSuccess = createAction(
+  '[Product] Load Product Success',
+  props<{ product: Product }>()
+);
+
+export const loadProductFailure = createAction(
+  '[Product] Load Product Failure',
+  props<{ error: string }>()
+);

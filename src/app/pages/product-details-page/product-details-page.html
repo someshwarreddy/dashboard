@@ -1,0 +1,9 @@
+@if (product(); as product) {
+  <app-product-details
+    [product]="product"
+  />
+}
+
+<button (click)="goBack()">
+  Back to Products
+</button>

@@ -149,4 +149,27 @@ createProduct$ = createEffect(() =>
     )
   )
 );
+loadProduct$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.loadProduct),
+
+    switchMap(({ id }) =>
+      this.productService.getProductById(id).pipe(
+
+        map(product =>
+          ProductActions.loadProductSuccess({ product })
+        ),
+
+        catchError(error =>
+          of(
+            ProductActions.loadProductFailure({
+              error: error.message
+            })
+          )
+        )
+
+      )
+    )
+  )
+);
 }

@@ -31,3 +31,7 @@ export const selectCreating = createSelector(
   selectProductState,
   state => state.creating
 );
+export const selectProductDetails = createSelector(
+  selectProductState,
+  state => state.productDetails
+);

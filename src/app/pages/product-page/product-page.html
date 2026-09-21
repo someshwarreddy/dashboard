@@ -2,125 +2,27 @@
 
   <h1>Product Management</h1>
 
-  <div class="search-box">
-    <input
-      type="text"
-      placeholder="Search products..."
-      #searchInput
-      (input)="searchProducts(searchInput.value)"
-    />
-
-    <button (click)="loadProducts()">
-      Load All Products
-    </button>
-  </div>
+  <app-product-search (search)="searchProducts($event)" />
 
   @if (loading()) {
-    <p class="loading">Loading products...</p>
+  <p class="loading">Loading products...</p>
   }
 
   @if (error()) {
-    <p class="error">{{ error() }}</p>
+  <p class="error">{{ error() }}</p>
   }
 
- 
-
-<app-product-list [products]="products()" (productDelete)="deleteProduct($event)" />
-
-
-
+  <app-product-list [products]="products()" (productDelete)="deleteProduct($event)" (selectProduct)="selectProduct($event)" />
 </div>
 
-@if (selectedProduct(); as product) {
-  <div class="selected-product">
-    <h2>Selected Product</h2>
-    <p><strong>{{ product.title }}</strong></p>
-    <p>Price: ₹{{ product.price }}</p>
-
-    <button (click)="clearSelectedProduct()">
-      Clear Selection
-    </button>
-
-    <button
-      (click)="$event.stopPropagation(); startEdit(product)"
-    >
-      Edit
-    </button>
-  </div>
+<!-- @if (selectedProduct(); as product) {
+<app-product-details [product]="product" (clear)="clearSelectedProduct()" (edit)="startEdit($event)" />
 }
 
-@if (editingProduct) {
-  <div class="edit-form">
-    <h3>Edit Product</h3>
 
-    <label>
-      Title:
-      <input
-        type="text"
-        [value]="editingProduct.title"
-        (input)="editingProduct.title = $any($event.target).value"
-      />
-    </label>
 
-    <label>
-      Price:
-      <input
-        type="number"
-        [value]="editingProduct.price"
-        (input)="editingProduct.price = +$any($event.target).value"
-      />
-    </label>
+<app-product-form
+ [product]="editingProduct"
+  (create)="createProduct($event)"
+/> -->
 
-    <button (click)="updateProduct(editingProduct)">
-      Save
-    </button>
-
-    <button (click)="putProduct(editingProduct)">
-      Save with PUT
-    </button>
-  </div>
-}
-
-<form
-  [formGroup]="productForm"
-  (ngSubmit)="createProduct()"
->
-
-  <label>
-    Title:
-    <input
-      type="text"
-      formControlName="title"
-    />
-  </label>
-
-  <label>
-    Price:
-    <input
-      type="number"
-      formControlName="price"
-    />
-  </label>
-
-  <input
-    type="file"
-    accept="image/*"
-    (change)="onImageSelected($event)"
-  />
-
-  <button
-    type="submit"
-    [disabled]="creating()"
-  >
-    {{ creating() ? 'Creating...' : 'Create Product' }}
-  </button>
-
-</form>
-
-@if (imagePreview) {
-  <img
-    [src]="imagePreview"
-    alt="Product preview"
-    width="200"
-  />
-}

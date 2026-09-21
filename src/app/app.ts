@@ -1,15 +1,9 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Store } from '@ngrx/store';
-import * as ProductActions from './store/product.actions';
-import * as ProductSelectors from './store/product.selectors';
-import { Product } from './models/product';
-import { FormBuilder } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-import { ProductPage } from './pages/product-page/product-page';
+
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet ,ProductPage, ReactiveFormsModule],
+  imports: [RouterOutlet,],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

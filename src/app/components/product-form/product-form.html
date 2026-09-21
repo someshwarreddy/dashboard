@@ -1,0 +1,46 @@
+<form [formGroup]="productForm" (ngSubmit)="createProduct()">
+    <label>
+        Title:
+        <input type="text" formControlName="title" />
+        @if (
+        productForm.controls.title.touched &&
+        productForm.controls.title.hasError('required')
+        ) {
+        <small>Title is required</small>
+        }
+    </label>
+
+    <label>
+        Price:
+        <input type="number" formControlName="price" />
+        @if (
+        productForm.controls.price.touched &&
+        productForm.controls.price.hasError('required')
+        ) {
+        <small>Price is required</small>
+        }
+
+        @if (
+        productForm.controls.price.touched &&
+        productForm.controls.price.hasError('min')
+        ) {
+        <small>Price must be greater than 0</small>
+        }
+    </label>
+
+    <label>
+        Product Image:
+        <input type="file"  #fileInput accept="image/*" (change)="onImageSelected($event)" />
+        @if (imageError) {
+        <small>{{ imageError }}</small>
+        }
+    </label>
+
+    @if (imagePreview) {
+    <img [src]="imagePreview" alt="Product preview" />
+    }
+
+    <button type="submit">
+     Save Product
+    </button>
+</form>

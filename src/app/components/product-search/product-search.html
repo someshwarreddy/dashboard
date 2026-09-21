@@ -1,1 +1,8 @@
-<p>product-search works!</p>
+  <div class="search-box">
+<input
+  type="text"
+  placeholder="Search products..."
+  #searchInput
+  (input)="search.emit(searchInput.value)"
+/>
+</div>

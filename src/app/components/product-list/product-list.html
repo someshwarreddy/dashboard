@@ -4,6 +4,7 @@
   <app-product-card
     [product]="product"
   (delete)="productDelete.emit($event)"
+  (select)="selectProduct.emit($event)"
   />
 }
 </div>

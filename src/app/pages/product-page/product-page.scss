@@ -8,26 +8,7 @@ h1 {
   margin-bottom: 20px;
 }
 
-.search-box {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
 
-  input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-  }
-
-  button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-}
 
 
 
@@ -53,4 +34,70 @@ h1 {
 
 .error {
   margin: 15px 0;
+}
+
+
+.edit-form {
+  max-width: 500px;
+  margin: 24px auto;
+  padding: 24px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.edit-form h3 {
+  margin: 0 0 4px;
+  font-size: 20px;
+  color: #111827;
+}
+
+.edit-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.edit-form input {
+  padding: 10px 12px;
+
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+
+  font-size: 15px;
+}
+
+.edit-form input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+.edit-form button {
+  padding: 11px 16px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: #2563eb;
+  color: white;
+
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.edit-form button:hover {
+  background: #1d4ed8;
 }

@@ -1,0 +1,74 @@
+import { Component, effect, inject } from '@angular/core';
+import { ProductForm } from '../../components/product-form/product-form';
+import { ActivatedRoute } from '@angular/router';
+import { map } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import * as ProductActions from '../../store/product.actions';
+import * as ProductSelectors from '../../store/product.selectors';
+import { CreateProduct, Product } from '../../models/product';
+@Component({
+  selector: 'app-product-form-page',
+  imports: [ProductForm],
+  templateUrl: './product-form-page.html',
+  styleUrl: './product-form-page.scss',
+})
+export class ProductFormPage {
+  private route = inject(ActivatedRoute);
+  private store = inject(Store);
+  productId = toSignal(
+    this.route.paramMap.pipe(
+      map(params => {
+        const id = params.get('id');
+        return id ? Number(id) : null;
+      })
+    ),
+    { initialValue: null }
+  );
+  constructor() {
+    effect(() => {
+      const id = this.productId();
+
+      if (id) {
+        this.store.dispatch(
+          ProductActions.loadProduct({ id })
+        );
+      }
+    });
+  }
+
+  product = this.store.selectSignal(
+    ProductSelectors.selectProductDetails
+  );
+  saveProduct(product: CreateProduct) {
+    const id = this.productId();
+
+    if (id === null) {
+      // CREATE
+      this.store.dispatch(
+        ProductActions.createProduct({ product })
+      );
+
+      return;
+    }
+    // UPDATE
+
+
+    const existingProduct = this.product();
+    if (!existingProduct) {
+      console.error('Product not found for update');
+      return;
+    }
+    const updatedProduct: Product = {
+      ...existingProduct,
+      title: product.title,
+      price: product.price
+    };
+
+    this.store.dispatch(
+      ProductActions.updateProduct({
+        product: updatedProduct
+      })
+    );
+  }
+}

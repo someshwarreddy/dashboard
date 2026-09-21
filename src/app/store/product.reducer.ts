@@ -10,7 +10,8 @@ export const initialState: ProductState = {
   error: null,
   selectedProductId: null,
   deletingId: null,
-  creating: false
+  creating: false,
+  productDetails: null
 };
 
 export const productReducer = createReducer(
@@ -124,6 +125,22 @@ export const productReducer = createReducer(
 on(ProductActions.createProductFailure, (state, { error }) => ({
   ...state,
   creating: false,
+  error
+})),
+on(ProductActions.loadProduct, state => ({
+  ...state,
+  loading: true,
+  error: null
+})),
+on(ProductActions.loadProductSuccess, (state, { product }) => ({
+  ...state,
+  productDetails: product,
+  loading: false,
+  error: null
+})),
+on(ProductActions.loadProductFailure, (state, { error }) => ({
+  ...state,
+  loading: false,
   error
 })),
 );

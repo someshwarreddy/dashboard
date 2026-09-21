@@ -1,4 +1,4 @@
-<div class="product-card">
+<div class="product-card" (click)="select.emit(product().id)">
 
   <img
     [src]="product().image"
@@ -8,7 +8,7 @@
   <h3>{{ product().title }}</h3>
 
   <p>₹{{ product().price }}</p>
- <button (click)="delete.emit(product().id)">
+ <button (click)="$event.stopPropagation();  delete.emit(product().id)">
     Delete
   </button>
 

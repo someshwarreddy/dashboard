@@ -10,4 +10,5 @@ import { Product } from '../../models/product';
 export class ProductCard {
   product = input.required<Product>();
   delete = output<number>();
+  select = output<number>();
 }

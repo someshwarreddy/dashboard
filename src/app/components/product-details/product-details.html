@@ -1,0 +1,19 @@
+<div class="selected-product">
+  <h2>Selected Product</h2>
+
+  <p>
+    <strong>{{ product().title }}</strong>
+  </p>
+
+  <p>
+    Price: ₹{{ product().price }}
+  </p>
+
+  <button (click)="clear.emit()">
+    Clear Selection
+  </button>
+
+  <button (click)="edit.emit(product())">
+    Edit
+  </button>
+</div>

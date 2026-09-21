@@ -31,15 +31,23 @@ export interface ProductState {
   selectedProductId: number | null;
   deletingId: number | null;
   creating: boolean;
+  productDetails: Product | null;
 }
 export type CreateProduct =
   Omit<Product, 'id' | 'image'> & {
     image: File;
   };
 
-  interface ProductApi {
+  export interface ProductApi {
   id: number;
   title: string;
   price: number;
   thumbnail: string;
 }
+
+export type UpdateProduct = {
+  id: number;
+  title: string;
+  price: number;
+  image?: File;
+};
