@@ -38,7 +38,9 @@ export class ProductPage implements OnInit {
     });
 }
   ngOnInit() {
+    if (this.products().length === 0) {
     this.loadProducts();
+  }
   }
 @ViewChild(ProductForm)
 productFormComponent!: ProductForm;
@@ -148,9 +150,14 @@ productFormComponent!: ProductForm;
   //   console.log(this.selectedFile);
     
   // }
-  createProduct(product: CreateProduct) {
-    this.store.dispatch(
-      ProductActions.createProduct({ product })
-    );
-  }
+  // createProduct(product: CreateProduct) {
+  //   this.store.dispatch(
+  //     ProductActions.createProduct({ product })
+  //   );
+  // }
+  // private router = inject(Router);
+
+createProduct() {
+  this.router.navigate(['/products/new']);
+}
 }

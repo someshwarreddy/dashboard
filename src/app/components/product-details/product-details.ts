@@ -11,4 +11,5 @@ export class ProductDetails {
   product = input.required<Product>();
   clear = output<void>();
   edit = output<Product>();
+  
 }

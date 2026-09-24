@@ -2,7 +2,10 @@ import { Component, inject, effect, output, ElementRef, ViewChild, input } from 
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CreateProduct, Product } from '../../models/product';
-
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Actions, ofType } from '@ngrx/effects';
+import * as ProductActions from '../../store/product.actions';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-product-form',
   imports: [ReactiveFormsModule],
@@ -16,6 +19,8 @@ export class ProductForm {
   product = input<Product | null>(null);
   imageError = '';
 
+  private actions$ = inject(Actions);
+  private router = inject(Router);
   constructor() {
     effect(() => {
       const product = this.product();
@@ -36,7 +41,22 @@ export class ProductForm {
         this.imageFile = null;
         this.imagePreview = null;
       }
+
+
     });
+
+    this.actions$
+      .pipe(
+        ofType(
+          ProductActions.createProductSuccess,
+          ProductActions.updateProductSuccess
+        ),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => {
+        this.router.navigate(['/products']);
+      });
+
   }
   productForm = this.fb.group({
     title: ['', [Validators.required]],
@@ -62,7 +82,7 @@ export class ProductForm {
       this.productForm.markAllAsTouched();
       return;
     }
-    if (!this.imageFile && !this.product()) { 
+    if (!this.imageFile && !this.product()) {
       this.imageError = 'Product image is required';
       return;
     }

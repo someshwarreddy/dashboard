@@ -6,6 +6,7 @@ import { Component, effect, inject } from '@angular/core';
 import * as ProductActions from '../../store/product.actions';
 import * as ProductSelectors from '../../store/product.selectors';
 import { ProductDetails } from '../../components/product-details/product-details';
+import { Product } from '../../models/product';
 @Component({
   selector: 'app-product-details-page',
   imports: [ProductDetails],
@@ -41,4 +42,12 @@ export class ProductDetailsPage {
   goBack() {
     this.router.navigate(['/products']);
   }
+
+editProduct(product: Product) {
+  this.router.navigate([
+    '/products',
+    product.id,
+    'edit'
+  ]);
+}
 }

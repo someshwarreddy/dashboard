@@ -51,3 +51,25 @@ export type UpdateProduct = {
   price: number;
   image?: File;
 };
+
+export interface AuthState {
+  user: User | null;
+  isAuthenticated: boolean;
+  loading: boolean;
+  error: string | null;
+  authInitialized: boolean;
+}
+export interface User {
+  _id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+export const initialAuthState: AuthState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false,
+  error: null,
+  authInitialized: false
+};

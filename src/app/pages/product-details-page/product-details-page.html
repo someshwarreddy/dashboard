@@ -1,6 +1,7 @@
 @if (product(); as product) {
   <app-product-details
     [product]="product"
+     (edit)="editProduct($event)"
   />
 }
 
