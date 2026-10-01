@@ -12,50 +12,82 @@ import { ProductForm } from '../../components/product-form/product-form';
 import { ViewChild } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-product-page',
-  imports: [ReactiveFormsModule, ProductList , ProductSearch, ProductDetails, ProductForm, ],
+  imports: [ReactiveFormsModule, ProductList, ProductSearch,],
   templateUrl: './product-page.html',
   styleUrl: './product-page.scss',
 })
 export class ProductPage implements OnInit {
   private actions$ = inject(Actions);
+  private route = inject(ActivatedRoute);
   private router = inject(Router);
   private store = inject(Store);
   editingProduct: Product | null = null;
   private fb = inject(FormBuilder);
   selectedFile: File | null = null;
   imagePreview: string | null = null;
+  private title = inject(Title);
   constructor() {
-  this.actions$
-    .pipe(
-      ofType(ProductActions.createProductSuccess),
-      takeUntilDestroyed()
-    )
-    .subscribe(() => {
-      this.productFormComponent.reset();
-    });
-}
+    this.actions$
+      .pipe(
+        ofType(ProductActions.createProductSuccess),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => {
+        this.productFormComponent.reset();
+      });
+
+  }
   ngOnInit() {
+    this.route.queryParamMap.subscribe(params => {
+      const search = params.get('search');
+
+      //   console.log('SEARCH FROM URL:', search);
+      //     if (search) {
+      //   this.searchProducts(search);
+      // }
+      console.log('SEARCH FROM URL:', search);
+      console.log('SEARCH TYPE:', typeof search);
+      console.log('SEARCH TRUTHY:', !!search);
+
+      if (search) {
+        console.log('CALLING searchProducts NOW');
+        this.searchProducts(search);
+      }
+
+      this.route.data.subscribe(data => {
+        console.log('Route data:', data);
+      });
+    });
+
+
     if (this.products().length === 0) {
-    this.loadProducts();
+      this.loadProducts();
+    }
+    const title = this.route.snapshot.data['title'];
+
+    this.title.setTitle(title);
   }
-  }
-@ViewChild(ProductForm)
-productFormComponent!: ProductForm;
-  productForm = this.fb.group({
-    title: [''],
-    price: [0]
-  });
+  @ViewChild(ProductForm)
+  productFormComponent!: ProductForm;
+  // productForm = this.fb.group({
+  //   title: [''],
+  //   price: [0]
+  // });
   loading = this.store.selectSignal(
     ProductSelectors.selectLoading
   );
 
-  products = this.store.selectSignal(
-    ProductSelectors.selectProducts
-  );
+  // products = this.store.selectSignal(
+  //   ProductSelectors.selectProducts
+  // );
 
+  products = this.store.selectSignal(
+    ProductSelectors.selectSortedProducts
+  );
   error = this.store.selectSignal(
     ProductSelectors.selectError
   );
@@ -72,6 +104,53 @@ productFormComponent!: ProductForm;
   loadProducts() {
     this.store.dispatch(ProductActions.loadProducts());
   }
+  // searchProducts(query: string) {
+  //   if (!query.trim()) {
+  //     this.loadProducts();
+  //     return;
+  //   }
+
+  //   this.store.dispatch(
+  //     ProductActions.searchProducts({ query })
+  //   );
+  // }
+  // this is the from the store technique to select product and navigate to product details page
+  // selectProduct(id: number) {
+  //   alert(`You selected product with ID ${id}`);
+  //   this.store.dispatch(
+  //     ProductActions.selectProduct({ id })
+  //   );
+  // }
+
+  // routing technique to navigate to product details page
+  selectProduct(id: number) {
+    // this.router.navigate(['/products', id]);
+    this.router.navigate(['/products', id], {
+      queryParams: {
+        tab: 'overview'
+      }
+    });
+  }
+
+  // searchProducts(query: string) {
+
+
+  //   this.router.navigate([], {
+  //     queryParams: {
+  //       search: query || null
+  //     },
+  //  queryParamsHandling: 'merge'
+
+  //   });
+  //   if (!query.trim()) {
+  //     this.loadProducts();
+  //     return;
+  //   }
+
+  //   this.store.dispatch(
+  //     ProductActions.searchProducts({ query })
+  //   );
+  // }
   searchProducts(query: string) {
     if (!query.trim()) {
       this.loadProducts();
@@ -82,18 +161,26 @@ productFormComponent!: ProductForm;
       ProductActions.searchProducts({ query })
     );
   }
-// this is the from the store technique to select product and navigate to product details page
-  // selectProduct(id: number) {
-  //   alert(`You selected product with ID ${id}`);
-  //   this.store.dispatch(
-  //     ProductActions.selectProduct({ id })
-  //   );
-  // }
-
-  // routing technique to navigate to product details page
-  selectProduct(id: number) {
-  this.router.navigate(['/products', id]);
-}
+  updateSearchUrl(query: string) {
+    this.router.navigate([], {
+      queryParams: {
+        search: query || null
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
+  changeSort(sort: string) {
+    console.log('SORT VALUE:', sort);
+    this.store.dispatch(
+      ProductActions.setSort({ sort })
+    );
+    this.router.navigate([], {
+      queryParams: {
+        sort: sort || null
+      },
+      queryParamsHandling: 'merge'
+    });
+  }
   clearSelectedProduct() {
     this.store.dispatch(
       ProductActions.clearSelectedProduct()
@@ -148,7 +235,7 @@ productFormComponent!: ProductForm;
   //   this.selectedFile = file;
   //   this.imagePreview = URL.createObjectURL(file);
   //   console.log(this.selectedFile);
-    
+
   // }
   // createProduct(product: CreateProduct) {
   //   this.store.dispatch(
@@ -157,7 +244,7 @@ productFormComponent!: ProductForm;
   // }
   // private router = inject(Router);
 
-createProduct() {
-  this.router.navigate(['/products/new']);
-}
+  createProduct() {
+    this.router.navigate(['/products/new']);
+  }
 }

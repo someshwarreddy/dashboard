@@ -35,3 +35,22 @@ export const selectProductDetails = createSelector(
   selectProductState,
   state => state.productDetails
 );
+export const selectSort = createSelector(
+  selectProductState,
+  state => state.sort
+);
+export const selectSortedProducts = createSelector(
+  selectProducts,
+  selectSort,
+  (products, sort) => {
+    if (sort === 'price-asc') {
+      return [...products].sort((a, b) => a.price - b.price);
+    }
+
+    if (sort === 'price-desc') {
+      return [...products].sort((a, b) => b.price - a.price);
+    }
+
+    return products;
+  }
+);

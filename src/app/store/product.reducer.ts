@@ -11,7 +11,8 @@ export const initialState: ProductState = {
   selectedProductId: null,
   deletingId: null,
   creating: false,
-  productDetails: null
+  productDetails: null,
+  sort: ''
 };
 
 export const productReducer = createReducer(
@@ -142,5 +143,9 @@ on(ProductActions.loadProductFailure, (state, { error }) => ({
   ...state,
   loading: false,
   error
+})),
+on(ProductActions.setSort, (state, { sort }) => ({
+  ...state,
+  sort
 })),
 );

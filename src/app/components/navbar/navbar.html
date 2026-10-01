@@ -1,0 +1,16 @@
+<nav class="navbar">
+
+    <a routerLink="/products" class="logo active"  routerLinkActive="active"   [routerLinkActiveOptions]="{ exact: true }">
+        Product Dashboard
+    </a>
+
+    @if (isAuthenticated()) {
+    <span class="user-name">
+        Welcome, {{ user()?.name }}
+    </span>
+    <button type="button" (click)="logout()">
+        Logout
+    </button>
+    }
+
+</nav>

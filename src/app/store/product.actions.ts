@@ -114,3 +114,7 @@ export const loadProductFailure = createAction(
   '[Product] Load Product Failure',
   props<{ error: string }>()
 );
+export const setSort = createAction(
+  '[Product] Set Sort',
+  props<{ sort: string }>()
+);

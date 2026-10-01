@@ -1,39 +1,61 @@
-<form [formGroup]="loginForm" (ngSubmit)="login()">
+<div class="login-page">
 
-  <div>
-    <label>Email</label>
+    <div class="login-card">
 
-    <input
-      type="email"
-      formControlName="email"
-    />
+        <h1>Welcome back</h1>
+        <p class="subtitle">Login to your account</p>
 
-    @if (
-      loginForm.controls.email.touched &&
-      loginForm.controls.email.invalid
-    ) {
-      <small>Enter a valid email.</small>
-    }
-  </div>
+        <form [formGroup]="loginForm" (ngSubmit)="login()">
 
-  <div>
-    <label>Password</label>
+            <div class="form-group">
+                <label for="email">Email</label>
 
-    <input
-      type="password"
-      formControlName="password"
-    />
+                <input id="email" type="email" formControlName="email" placeholder="Enter your email" />
 
-    @if (
-      loginForm.controls.password.touched &&
-      loginForm.controls.password.invalid
-    ) {
-      <small>Password is required.</small>
-    }
-  </div>
+                @if (
+                loginForm.controls.email.touched &&
+                loginForm.controls.email.invalid
+                ) {
+                <small class="error">
+                    Enter a valid email address.
+                </small>
+                }
+            </div>
 
-  <button type="submit">
-    Login
-  </button>
+            <div class="form-group">
+                <label for="password">Password</label>
 
-</form>
+                <input id="password" type="password" formControlName="password" placeholder="Enter your password" />
+
+                @if (
+                loginForm.controls.password.touched &&
+                loginForm.controls.password.invalid
+                ) {
+                <small class="error">
+                    Password is required.
+                </small>
+                }
+            </div>
+
+            <button class="login-button" type="submit" [disabled]="loginForm.invalid || isLoading()">
+                @if (isLoading()) {
+                Logging in...
+                } @else {
+                Login
+                }
+            </button>
+
+        </form>
+        @if (error()) {
+        <p class="error-message">
+            {{ error() }}
+        </p>
+        }
+        <p class="register-link">
+            Don't have an account?
+            <a routerLink="/register">Register</a>
+        </p>
+
+    </div>
+
+</div>

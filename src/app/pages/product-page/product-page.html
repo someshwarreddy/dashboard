@@ -2,8 +2,16 @@
 
   <h1>Product Management</h1>
 
-  <app-product-search (search)="searchProducts($event)" />
-
+  <!-- <app-product-search (search)="searchProducts($event) " /> -->
+   <app-product-search
+  (search)="updateSearchUrl($event)"
+/>
+  <select 
+  (change)="changeSort($any($event.target).value)">
+    <option value="">Sort</option>
+    <option value="price-asc">Price: Low to High</option>
+    <option value="price-desc">Price: High to Low</option>
+  </select>
   @if (loading()) {
   <p class="loading">Loading products...</p>
   }
@@ -12,7 +20,8 @@
   <p class="error">{{ error() }}</p>
   }
 
-  <app-product-list [products]="products()" (productDelete)="deleteProduct($event)" (selectProduct)="selectProduct($event)" />
+  <app-product-list [products]="products()" (productDelete)="deleteProduct($event)"
+    (selectProduct)="selectProduct($event)" />
 </div>
 
 <!-- @if (selectedProduct(); as product) {
@@ -25,9 +34,6 @@
  [product]="editingProduct"
   (create)="createProduct($event)"
 /> -->
-<button
-  type="button"
-  (click)="createProduct()"
->
+<button type="button" (click)="createProduct()">
   + Create Product
 </button>

@@ -1,3 +1,8 @@
+
+<nav>
+  <a routerLink="reviews">Reviews</a>
+  <a routerLink="specifications">Specifications</a>
+</nav>
 @if (product(); as product) {
   <app-product-details
     [product]="product"
@@ -8,3 +13,16 @@
 <button (click)="goBack()">
   Back to Products
 </button>
+<button (click)="changeTab('overview')">
+  Overview
+</button>
+
+<button (click)="changeTab('reviews')">
+  Reviews
+</button>
+<a routerLink="reviews">Reviews</a>
+<p>Current Tab: {{ activeTab() }}</p>
+
+
+<router-outlet></router-outlet>
+

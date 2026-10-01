@@ -15,15 +15,17 @@ private router = inject(Router);
     this.actions$.pipe(
       ofType(AuthActions.login),
 
-      switchMap(({ email, password }) =>
+      switchMap(({ email, password, returnUrl }) =>
         this.authService.login({
           email,
-          password
+          password,
+        
         }).pipe(
 
           map(response =>
             AuthActions.loginSuccess({
-              token: response.token
+              token: response.token,
+              returnUrl
             })
           ),
 
@@ -115,5 +117,140 @@ logout$ = createEffect(
       })
     ),
   { dispatch: false }
+);
+register$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AuthActions.register),
+
+    switchMap(({ name, email, password }) =>
+      this.authService.register({
+        name,
+        email,
+        password
+      }).pipe(
+
+        map(() =>
+          AuthActions.registerSuccess()
+        ),
+
+        catchError(error =>
+          of(
+            AuthActions.registerFailure({
+              error: error.error?.message ?? 'Registration failed'
+            })
+          )
+        )
+
+      )
+    )
+  )
+);
+registerSuccess$ = createEffect(
+  () =>
+    this.actions$.pipe(
+      ofType(AuthActions.registerSuccess),
+      tap(() => {
+        this.router.navigate(['/login']);
+      })
+    ),
+  { dispatch: false }
+);
+// loginSuccess$ = createEffect(
+//   () =>
+//     this.actions$.pipe(
+//       ofType(AuthActions.loginSuccess),
+//       tap(() => {
+//         this.router.navigate(['/products']);
+//       })
+//     ),
+//   { dispatch: false }
+// );
+// loginSuccess$ = createEffect(
+//   () =>
+//     this.actions$.pipe(
+//       ofType(AuthActions.loginSuccess),
+//       tap(({ returnUrl }) => {
+//         this.router.navigateByUrl(
+//           returnUrl || '/products'
+//         );
+//       })
+//     ),
+//   { dispatch: false }
+// );
+// loginSuccess$ = createEffect(
+//   () =>
+//     this.actions$.pipe(
+//       ofType(AuthActions.loginSuccess),
+//       tap(({ returnUrl }) => {
+
+
+//         const destination =
+//           returnUrl &&
+//           returnUrl.startsWith('/') &&
+//           !returnUrl.startsWith('//')
+//             ? returnUrl
+//             : '/products';
+
+//         this.router.navigateByUrl(destination);
+//       })
+//     ),
+//   { dispatch: false }
+// );
+loadCurrentUser$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AuthActions.loadCurrentUser),
+
+    switchMap(({ returnUrl }) =>
+      this.authService.getLoggedInUser().pipe(
+
+        map(response =>
+          AuthActions.loadCurrentUserSuccess({
+            user: response.user,
+            returnUrl
+          })
+        ),
+
+        catchError(error =>
+          of(
+            AuthActions.loadCurrentUserFailure({
+              error:
+                error.error?.message ??
+                'Failed to load user'
+            })
+          )
+        )
+
+      )
+    )
+  )
+);
+loadCurrentUserSuccess$ = createEffect(
+  () =>
+    this.actions$.pipe(
+      ofType(AuthActions.loadCurrentUserSuccess),
+
+      tap(({ returnUrl }) => {
+        const destination =
+          returnUrl &&
+          returnUrl.startsWith('/') &&
+          !returnUrl.startsWith('//')
+            ? returnUrl
+            : '/products';
+
+        this.router.navigateByUrl(destination);
+      })
+    ),
+  { dispatch: false }
+);
+loadCurrentUserAfterLogin$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(AuthActions.loginSuccess),
+
+    map(({ returnUrl }) =>
+      AuthActions.loadCurrentUser({
+        returnUrl
+      })
+    )
+  )
 );
 }

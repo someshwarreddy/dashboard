@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { Component, effect, inject, ViewChild } from '@angular/core';
 import { ProductForm } from '../../components/product-form/product-form';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
@@ -16,6 +16,8 @@ import { CreateProduct, Product } from '../../models/product';
 export class ProductFormPage {
   private route = inject(ActivatedRoute);
   private store = inject(Store);
+  @ViewChild(ProductForm)
+productFormComponent!: ProductForm;
   productId = toSignal(
     this.route.paramMap.pipe(
       map(params => {
@@ -71,4 +73,8 @@ export class ProductFormPage {
       })
     );
   }
+  canDeactivate(): boolean {
+      console.log('ProductFormPage canDeactivate called');
+  return this.productFormComponent.canDeactivate();
+}
 }

@@ -1,0 +1,39 @@
+.navbar {
+  height: 64px;
+  padding: 0 32px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  background: #1f2937;
+  border-bottom: 1px solid #374151;
+}
+
+.logo , .user-name {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+button {
+  padding: 8px 18px;
+
+  border: 1px solid #6b7280;
+  border-radius: 6px;
+
+  background: transparent;
+  color: #ffffff;
+
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background: #374151;
+  }
+}
+.logo.active {
+  font-weight: bold;
+  color: #3b82f6;
+}

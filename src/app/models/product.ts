@@ -32,6 +32,7 @@ export interface ProductState {
   deletingId: number | null;
   creating: boolean;
   productDetails: Product | null;
+  sort: string;
 }
 export type CreateProduct =
   Omit<Product, 'id' | 'image'> & {

@@ -105,5 +105,9 @@ export class ProductForm {
     this.fileInput.nativeElement.value = '';
 
   }
-
+canDeactivate(): boolean {
+  console.log('ProductForm canDeactivate called');
+  console.log('dirty:', this.productForm.dirty);
+  return !this.productForm.dirty;
+}
 }
