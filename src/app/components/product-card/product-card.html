@@ -1,4 +1,4 @@
-<div class="product-card" (click)="select.emit(product().id)">
+<!-- <div class="product-card" (click)="select.emit(product().id)">
 
   <img
     [src]="product().image"
@@ -12,4 +12,19 @@
     Delete
   </button>
 
+</div> -->
+
+
+<div class="product-identity">
+  <img
+    [src]="product().image"
+    [alt]="product().title"
+  />
+
+  <button
+    type="button"
+    class="product-title"
+    (click)="select.emit(product().id)">
+    {{ product().title }}
+  </button>
 </div>

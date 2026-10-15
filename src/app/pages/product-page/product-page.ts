@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, computed } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { CreateProduct, Product } from '../../models/product';
 import * as ProductActions from '../../store/product.actions';
@@ -12,11 +12,11 @@ import { ProductForm } from '../../components/product-form/product-form';
 import { ViewChild } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-product-page',
-  imports: [ReactiveFormsModule, ProductList, ProductSearch,],
+  imports: [ReactiveFormsModule, ProductList, ProductSearch, RouterLink],
   templateUrl: './product-page.html',
   styleUrl: './product-page.scss',
 })
@@ -42,34 +42,70 @@ export class ProductPage implements OnInit {
 
   }
   ngOnInit() {
+    // this.route.queryParamMap.subscribe(params => {
+    //   // const search = params.get('search');
+
+    //   //   console.log('SEARCH FROM URL:', search);
+    //   //     if (search) {
+    //   //   this.searchProducts(search);
+    //   // }
+    //   //     const search = params['search'] ?? '';
+    //   // const sort = params['sort'] ?? '';
+    //   // const page = Number(params['page'] ?? 1);
+    //   // console.log('SEARCH FROM URL:', search);
+    //   // console.log('SEARCH TYPE:', typeof search);
+    //   // console.log('SEARCH TRUTHY:', !!search);
+    //   const search = params.get('search') ?? '';
+    //   const sort = params.get('sort') ?? '';
+    //   const page = Number(params.get('page') ?? 1);
+
+    //   console.log({
+    //     search,
+    //     sort,
+    //     page
+    //   });
+    //   if (search) {
+    //     console.log('CALLING searchProducts NOW');
+    //     this.searchProducts(search);
+    //   }
+
+    //   this.route.data.subscribe(data => {
+    //     console.log('Route data:', data);
+    //   });
+    // });
+
+
+    // if (this.products().length === 0) {
+    //   this.loadProducts();
+    // }
+     const title = this.route.snapshot.data['title'];
+
+     this.title.setTitle(title);
     this.route.queryParamMap.subscribe(params => {
-      const search = params.get('search');
+  const search = params.get('search') ?? '';
+  const sort = params.get('sort') ?? '';
+  const page = Number(params.get('page') ?? 1);
+  const limit = this.limit();
 
-      //   console.log('SEARCH FROM URL:', search);
-      //     if (search) {
-      //   this.searchProducts(search);
-      // }
-      console.log('SEARCH FROM URL:', search);
-      console.log('SEARCH TYPE:', typeof search);
-      console.log('SEARCH TRUTHY:', !!search);
-
-      if (search) {
-        console.log('CALLING searchProducts NOW');
-        this.searchProducts(search);
-      }
-
-      this.route.data.subscribe(data => {
-        console.log('Route data:', data);
-      });
-    });
-
-
-    if (this.products().length === 0) {
-      this.loadProducts();
-    }
-    const title = this.route.snapshot.data['title'];
-
-    this.title.setTitle(title);
+  if (search.trim()) {
+    this.store.dispatch(
+      ProductActions.searchProducts({
+        query: search,
+        page,
+        limit,
+        sort
+      })
+    );
+  } else {
+    this.store.dispatch(
+      ProductActions.loadProducts({
+        page,
+        limit,
+        sort
+      })
+    );
+  }
+});
   }
   @ViewChild(ProductForm)
   productFormComponent!: ProductForm;
@@ -81,13 +117,13 @@ export class ProductPage implements OnInit {
     ProductSelectors.selectLoading
   );
 
-  // products = this.store.selectSignal(
-  //   ProductSelectors.selectProducts
-  // );
-
   products = this.store.selectSignal(
-    ProductSelectors.selectSortedProducts
+    ProductSelectors.selectProducts
   );
+
+  // products = this.store.selectSignal(
+  //   ProductSelectors.selectSortedProducts
+  // );
   error = this.store.selectSignal(
     ProductSelectors.selectError
   );
@@ -101,8 +137,74 @@ export class ProductPage implements OnInit {
     ProductSelectors.selectCreating
   );
 
-  loadProducts() {
-    this.store.dispatch(ProductActions.loadProducts());
+  page = this.store.selectSignal(
+    ProductSelectors.selectPage
+  );
+
+  limit = this.store.selectSignal(
+    ProductSelectors.selectLimit
+  );
+
+  totalPages = this.store.selectSignal(
+    ProductSelectors.selectTotalPages
+  );
+
+
+  // loadProducts() {
+  //   this.store.dispatch(ProductActions.loadProducts(
+  //     {
+  //       page: 1,
+  //       limit: 10,
+  //       sort: this.route.snapshot.queryParamMap.get('sort') ?? ''
+  //     }
+  //   ));
+  // }
+//   loadProducts() {
+//   const params = this.route.snapshot.queryParamMap;
+
+//   this.store.dispatch(
+//     ProductActions.loadProducts({
+//       page: Number(params.get('page') ?? 1),
+//       limit: this.limit(),
+//       sort: params.get('sort') ?? ''
+//     })
+//   );
+// }
+  //   changePage(page: number) {
+  //   this.store.dispatch(
+  //     ProductActions.loadProducts({
+  //       page,
+  //       limit: this.limit()
+  //     })
+  //   );
+  // }
+  changePage(page: number) {
+    this.router.navigate([], {
+    queryParams: { page },
+    queryParamsHandling: 'merge'
+  });
+    // const search = this.route.snapshot.queryParamMap.get('search');
+    // const sort = this.route.snapshot.queryParamMap.get('sort') ?? '';
+
+    // if (search) {
+    //   this.store.dispatch(
+    //     ProductActions.searchProducts({
+    //       query: search,
+    //       page,
+    //       limit: this.limit(),
+    //       sort
+    //     })
+    //   );
+    //   return;
+    // }
+
+    // this.store.dispatch(
+    //   ProductActions.loadProducts({
+    //     page,
+    //     limit: this.limit(),
+    //     sort
+    //   })
+    // );
   }
   // searchProducts(query: string) {
   //   if (!query.trim()) {
@@ -124,12 +226,12 @@ export class ProductPage implements OnInit {
 
   // routing technique to navigate to product details page
   selectProduct(id: number) {
-    // this.router.navigate(['/products', id]);
-    this.router.navigate(['/products', id], {
-      queryParams: {
-        tab: 'overview'
-      }
-    });
+    this.router.navigate(['/products', id]);
+    // this.router.navigate(['/products', id], {
+    //   queryParams: {
+    //     tab: 'overview'
+    //   }
+    // });
   }
 
   // searchProducts(query: string) {
@@ -151,41 +253,54 @@ export class ProductPage implements OnInit {
   //     ProductActions.searchProducts({ query })
   //   );
   // }
-  searchProducts(query: string) {
-    if (!query.trim()) {
-      this.loadProducts();
-      return;
-    }
 
-    this.store.dispatch(
-      ProductActions.searchProducts({ query })
-    );
-  }
+  // searchProducts(query: string) {
+  //   if (!query.trim()) {
+  //     this.loadProducts();
+  //     return;
+  //   }
+
+  //   this.store.dispatch(
+  //     ProductActions.searchProducts({
+  //       query,
+  //       page: 1,
+  //       limit: this.limit(),
+  //       sort: this.route.snapshot.queryParamMap.get('sort') ?? ''
+  //     })
+  //   );
+  // }
+
   updateSearchUrl(query: string) {
     this.router.navigate([], {
       queryParams: {
-        search: query || null
+        search: query || null,
+          page: 1
       },
       queryParamsHandling: 'merge'
     });
   }
+
   changeSort(sort: string) {
     console.log('SORT VALUE:', sort);
-    this.store.dispatch(
-      ProductActions.setSort({ sort })
-    );
+   
     this.router.navigate([], {
       queryParams: {
-        sort: sort || null
+        sort: sort || null,
+          page: 1
       },
       queryParamsHandling: 'merge'
     });
+    //  this.store.dispatch(
+    //   ProductActions.setSort({ sort })
+    // );
   }
+
   clearSelectedProduct() {
     this.store.dispatch(
       ProductActions.clearSelectedProduct()
     );
   }
+
   deleteProduct(id: number) {
     alert(`Are you sure you want to delete product with ID ${id}?`);
     this.store.dispatch(
@@ -247,4 +362,10 @@ export class ProductPage implements OnInit {
   createProduct() {
     this.router.navigate(['/products/new']);
   }
+  pages = computed(() =>
+    Array.from(
+      { length: this.totalPages() },
+      (_, index) => index + 1
+    )
+  );
 }

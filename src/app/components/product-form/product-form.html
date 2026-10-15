@@ -44,3 +44,9 @@
      Save Product
     </button>
 </form>
+@if (showUnsavedDialog()) {
+  <app-unsaved-changes-dialog
+    (stay)="onStay()"
+    (leave)="onLeave()"
+  />
+}

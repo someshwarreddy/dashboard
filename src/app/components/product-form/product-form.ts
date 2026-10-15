@@ -1,4 +1,4 @@
-import { Component, inject, effect, output, ElementRef, ViewChild, input } from '@angular/core';
+import { Component, inject, effect, output, ElementRef, ViewChild, input, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { FormBuilder, Validators } from '@angular/forms';
 import { CreateProduct, Product } from '../../models/product';
@@ -6,9 +6,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Actions, ofType } from '@ngrx/effects';
 import * as ProductActions from '../../store/product.actions';
 import { Router } from '@angular/router';
+import { UnsavedChangesDialog } from '../unsaved-changes-dialog/unsaved-changes-dialog';
 @Component({
   selector: 'app-product-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, UnsavedChangesDialog],
   templateUrl: './product-form.html',
   styleUrl: './product-form.scss',
 })
@@ -18,9 +19,10 @@ export class ProductForm {
   private fb = inject(FormBuilder);
   product = input<Product | null>(null);
   imageError = '';
-
+  showUnsavedDialog = signal(false);
   private actions$ = inject(Actions);
   private router = inject(Router);
+  private navigationDecision?: (value: boolean) => void;
   constructor() {
     effect(() => {
       const product = this.product();
@@ -105,9 +107,34 @@ export class ProductForm {
     this.fileInput.nativeElement.value = '';
 
   }
-canDeactivate(): boolean {
-  console.log('ProductForm canDeactivate called');
-  console.log('dirty:', this.productForm.dirty);
-  return !this.productForm.dirty;
+
+
+  onStay() {
+    this.showUnsavedDialog.set(false);
+    this.navigationDecision?.(false);
+    this.navigationDecision = undefined;
+  }
+
+  onLeave() {
+    this.showUnsavedDialog.set(false);
+    this.navigationDecision?.(true);
+    this.navigationDecision = undefined;
+  }
+  // canDeactivate(): boolean {
+  //   console.log('ProductForm canDeactivate called');
+  //   console.log('dirty:', this.productForm.dirty);
+  //   return !this.productForm.dirty;
+  // }
+  canDeactivate(): boolean | Promise<boolean> {
+
+  if (!this.productForm.dirty) {
+    return true;
+  }
+
+  this.showUnsavedDialog.set(true);
+
+  return new Promise<boolean>(resolve => {
+    this.navigationDecision = resolve;
+  });
 }
 }

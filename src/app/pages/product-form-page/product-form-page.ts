@@ -1,4 +1,4 @@
-import { Component, effect, inject, ViewChild } from '@angular/core';
+import { Component, effect, HostListener, inject, ViewChild } from '@angular/core';
 import { ProductForm } from '../../components/product-form/product-form';
 import { ActivatedRoute } from '@angular/router';
 import { map } from 'rxjs';
@@ -73,8 +73,20 @@ productFormComponent!: ProductForm;
       })
     );
   }
-  canDeactivate(): boolean {
-      console.log('ProductFormPage canDeactivate called');
-  return this.productFormComponent.canDeactivate();
+  canDeactivate():  boolean | Promise<boolean> {
+    console.log('🔥 ProductFormPage canDeactivate CALLED');
+
+  const result = this.productFormComponent.canDeactivate();
+
+  console.log('🔥 ProductFormPage result:', result);
+
+  return result;
+}
+@HostListener('window:beforeunload', ['$event'])
+onBeforeUnload(event: BeforeUnloadEvent) {
+  if (this.productFormComponent?.productForm.dirty) {
+    event.preventDefault();
+    event.returnValue = '';
+  }
 }
 }

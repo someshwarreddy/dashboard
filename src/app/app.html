@@ -1,2 +1,11 @@
-<app-navbar/>
-<router-outlet />
+<!-- <app-navbar/>
+ <router-outlet  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"></router-outlet>
+ <router-outlet name="sidebar"></router-outlet> -->
+ 
+<router-outlet
+  (activate)="onActivate($event)"
+  (deactivate)="onDeactivate($event)"
+/>
+
+<router-outlet name="sidebar" />

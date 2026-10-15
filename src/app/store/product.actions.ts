@@ -1,15 +1,37 @@
 import { createAction, props } from '@ngrx/store';
-import { Product, CreateProduct  } from '../models/product';
+import { Product, CreateProduct } from '../models/product';
 
 
 // load product actions
+// export const loadProducts = createAction(
+//   '[Product] Load Products'
+// );
+
+// export const loadProductsSuccess = createAction(
+//   '[Product] Load Products Success',
+//   props<{ products: Product[] }>()
+// );
+
+// export const loadProductsFailure = createAction(
+//   '[Product] Load Products Failure',
+//   props<{ error: string }>()
+// );
+// load product actions
 export const loadProducts = createAction(
-  '[Product] Load Products'
+  '[Product] Load Products',
+  props<{
+    page: number;
+    limit: number;
+     sort: string;
+  }>()
 );
 
 export const loadProductsSuccess = createAction(
   '[Product] Load Products Success',
-  props<{ products: Product[] }>()
+  props<{
+    products: Product[];
+    total: number;
+  }>()
 );
 
 export const loadProductsFailure = createAction(
@@ -20,12 +42,24 @@ export const loadProductsFailure = createAction(
 // search product actions
 export const searchProducts = createAction(
   '[Product] Search Products',
-  props<{ query: string }>()
+  props<{
+    query: string,
+    page: number;
+    limit: number;
+    sort: string;
+  }>()
 );
 
+// export const searchProductsSuccess = createAction(
+//   '[Product] Search Products Success',
+//   props<{ products: Product[] }>()
+// );
 export const searchProductsSuccess = createAction(
   '[Product] Search Products Success',
-  props<{ products: Product[] }>()
+  props<{
+    products: Product[];
+    total: number;
+  }>()
 );
 
 export const searchProductsFailure = createAction(
@@ -114,7 +148,7 @@ export const loadProductFailure = createAction(
   '[Product] Load Product Failure',
   props<{ error: string }>()
 );
-export const setSort = createAction(
-  '[Product] Set Sort',
-  props<{ sort: string }>()
-);
+// export const setSort = createAction(
+//   '[Product] Set Sort',
+//   props<{ sort: string }>()
+// );

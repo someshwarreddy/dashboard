@@ -50,3 +50,41 @@
   }
 }
 
+// new css
+
+:host {
+  display: block;
+  min-width: 200px;
+}
+
+.product-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.product-identity img {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  object-fit: contain;
+  padding: 4px;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.product-title {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #111827;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+
+  &:hover {
+    color: #2563eb;
+  }
+}

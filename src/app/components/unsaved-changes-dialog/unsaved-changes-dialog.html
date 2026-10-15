@@ -1,0 +1,26 @@
+@if (true) {
+  <div class="dialog-backdrop">
+
+    <div class="dialog">
+
+      <h2>Unsaved Changes</h2>
+
+      <p>
+        You have unsaved changes.
+        Are you sure you want to leave this page?
+      </p>
+
+      <div class="actions">
+        <button type="button" (click)="stay.emit()">
+          Stay
+        </button>
+
+        <button type="button" (click)="leave.emit()">
+          Leave
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+}

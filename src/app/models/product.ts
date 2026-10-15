@@ -28,18 +28,25 @@ export interface ProductState {
   products: Product[];
   loading: boolean;
   error: string | null;
+
   selectedProductId: number | null;
   deletingId: number | null;
   creating: boolean;
   productDetails: Product | null;
-  sort: string;
+  // sort: string;
+  search: string;
+
+  // pagination
+  page: number;
+  limit: number;
+  total: number;
 }
 export type CreateProduct =
   Omit<Product, 'id' | 'image'> & {
     image: File;
   };
 
-  export interface ProductApi {
+export interface ProductApi {
   id: number;
   title: string;
   price: number;
@@ -74,3 +81,7 @@ export const initialAuthState: AuthState = {
   error: null,
   authInitialized: false
 };
+export interface ProductListResponse {
+  products: Product[];
+  total: number;
+}

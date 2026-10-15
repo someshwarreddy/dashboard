@@ -1,4 +1,4 @@
-
+<!-- 
 <div class="products">
 @for (product of products(); track product.id) {
   <app-product-card
@@ -6,5 +6,68 @@
   (delete)="productDelete.emit($event)"
   (select)="selectProduct.emit($event)"
   />
+}
+</div> -->
+
+
+<div class="products-table-wrapper">
+  <table class="products-table">
+    <thead>
+      <tr>
+        <th>Product</th>
+        <th>Product ID</th>
+        <th>Price</th>
+        <th class="actions-column">Actions</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      @for (product of products(); track product.id) {
+        <tr>
+          <td>
+            <app-product-card
+              [product]="product"
+              (delete)="productDelete.emit($event)"
+              (select)="selectProduct.emit($event)"
+            />
+          </td>
+          <td>
+            <span class="product-id">#{{ product.id }}</span>
+          </td>
+          <td>
+            <span class="product-price">
+              ₹{{ product.price }}
+            </span>
+          </td>
+          <td class="actions-column">
+            <button
+              type="button"
+              class="view-button"
+              (click)="selectProduct.emit(product.id)">
+              View
+            </button>
+            <button
+              type="button"
+              class="delete-button"
+              (click)="productDelete.emit(product.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+
+
+@if (products().length > 0) {
+  <div class="products-table-wrapper">
+    <!-- Keep your existing table here, unchanged -->
+  </div>
+} @else {
+  <div class="empty-state">
+    <div class="empty-icon">📦</div>
+    <h3>No products found</h3>
+    <p>Try changing your search or add a new product.</p>
+  </div>
 }
 </div>

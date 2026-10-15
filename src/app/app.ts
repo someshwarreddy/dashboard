@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import * as AuthActions from './store/auth.actions';
 import * as AuthSelectors from './store/auth.selectors';
 import { Navbar } from './components/navbar/navbar';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet, Navbar],
@@ -23,9 +23,15 @@ export class App implements OnInit {
 //     );
 //   });
 // }
+private router = inject(Router);
 private store = inject(Store);
 ngOnInit() {
   this.store.dispatch(AuthActions.restoreAuth());
+}
+constructor() {
+  this.router.events.subscribe(event => {
+    // console.log('ROUTER EVENT:', event);
+  });
 }
 // createFormData() {
 //   const formData = new FormData();
@@ -108,4 +114,11 @@ ngOnInit() {
 //     console.log(response);
 //   });
 // }
+onActivate(component: unknown) {
+  console.log('🟢 ROUTE ACTIVATED:', component);
+}
+
+onDeactivate(component: unknown) {
+  console.log('🔴 ROUTE DEACTIVATED:', component);
+}
 }

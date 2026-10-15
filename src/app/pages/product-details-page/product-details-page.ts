@@ -31,15 +31,18 @@ export class ProductDetailsPage {
     { initialValue: 'overview' }
   );
   constructor() {
-    effect(() => {
-      const id = this.productId();
-      // console.log('Product ID:', id);
-      if (id) {
-        this.store.dispatch(
-          ProductActions.loadProduct({ id })
-        );
-      }
-    });
+    // effect(() => {
+    //   const id = this.productId();
+    //   // console.log('Product ID:', id);
+    //   if (id) {
+    //     this.store.dispatch(
+    //       ProductActions.loadProduct({ id })
+    //     );
+    //   }
+    // });
+    this.route.data.subscribe(data => {
+    console.log('🔥 RESOLVED DATA:', data);
+  });
     const title = this.route.snapshot.data['title'];
     this.title.setTitle(title);
   }

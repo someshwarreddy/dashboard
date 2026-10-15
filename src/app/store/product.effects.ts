@@ -11,55 +11,172 @@ export class ProductEffects {
   private actions$ = inject(Actions);
   private productService = inject(ProductService);
 
-  loadProducts$ = createEffect(() =>
-    this.actions$.pipe(
+  // loadProducts$ = createEffect(() =>
+  //   this.actions$.pipe(
 
-      ofType(ProductActions.loadProducts),
+  //     ofType(ProductActions.loadProducts),
 
-      exhaustMap(() =>
-        this.productService.getProducts().pipe(
+  //     exhaustMap(() =>
+  //       this.productService.getProducts().pipe(
 
-          map(products =>
-            ProductActions.loadProductsSuccess({
-              products
+  //         map(products =>
+  //           ProductActions.loadProductsSuccess({
+  //             products
+  //           })
+  //         ),
+
+  //         catchError(error =>
+  //           of(
+  //             ProductActions.loadProductsFailure({
+  //               error: error.message
+  //             })
+  //           )
+  //         )
+
+  //       )
+  //     )
+  //   )
+  // );
+// loadProducts$ = createEffect(() =>
+//   this.actions$.pipe(
+
+//     ofType(ProductActions.loadProducts),
+
+//     exhaustMap(({ page, limit }) =>
+//       this.productService.getProducts(page, limit).pipe(
+
+//         map(({ products, total }) =>
+//           ProductActions.loadProductsSuccess({
+//             products,
+//             total
+//           })
+//         ),
+
+//         catchError(error =>
+//           of(
+//             ProductActions.loadProductsFailure({
+//               error: error.message
+//             })
+//           )
+//         )
+
+//       )
+//     )
+//   )
+// );
+loadProducts$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.loadProducts),
+
+    exhaustMap(({ page, limit, sort }) =>
+      this.productService.getProducts(page, limit, sort).pipe(
+        map(({ products, total }) =>
+          ProductActions.loadProductsSuccess({
+            products,
+            total
+          })
+        ),
+
+        catchError(error =>
+          of(
+            ProductActions.loadProductsFailure({
+              error: error.message
+            })
+          )
+        )
+      )
+    )
+  )
+);
+  // searchProducts$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(ProductActions.searchProducts),
+  //     map(({ query }) => query),
+  //     debounceTime(500),
+  //     distinctUntilChanged(),
+  //     switchMap(query =>
+  //       this.productService.searchProducts(query).pipe(
+  //         map(products =>
+  //           ProductActions.searchProductsSuccess({ products })
+  //         )
+  //       )
+  //     ),
+  //     catchError(error =>
+  //       of(
+  //         ProductActions.searchProductsFailure({
+  //           error: error.message
+  //         })
+  //       )
+  //     )
+  //   )
+  // )
+//   searchProducts$ = createEffect(() =>
+//   this.actions$.pipe(
+//     ofType(ProductActions.searchProducts),
+
+//     debounceTime(500),
+
+//     distinctUntilChanged(
+//       (previous, current) =>
+//         previous.query === current.query &&
+//         previous.page === current.page &&
+//         previous.limit === current.limit
+//     ),
+
+//     switchMap(({ query, page, limit }) =>
+//       this.productService.searchProducts(query, page, limit).pipe(
+//         map(({ products, total }) =>
+//           ProductActions.searchProductsSuccess({
+//             products,
+//             total
+//           })
+//         ),
+//         catchError(error =>
+//           of(
+//             ProductActions.searchProductsFailure({
+//               error: error.message
+//             })
+//           )
+//         )
+//       )
+//     )
+//   )
+// );
+searchProducts$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(ProductActions.searchProducts),
+
+    debounceTime(500),
+
+    distinctUntilChanged(
+      (previous, current) =>
+        previous.query === current.query &&
+        previous.page === current.page &&
+        previous.limit === current.limit &&
+        previous.sort === current.sort
+    ),
+
+    switchMap(({ query, page, limit, sort }) =>
+      this.productService.searchProducts(query, page, limit, sort)
+        .pipe(
+          map(({ products, total }) =>
+            ProductActions.searchProductsSuccess({
+              products,
+              total
             })
           ),
 
           catchError(error =>
             of(
-              ProductActions.loadProductsFailure({
+              ProductActions.searchProductsFailure({
                 error: error.message
               })
             )
           )
-
         )
-      )
-    )
-  );
-
-  searchProducts$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(ProductActions.searchProducts),
-      map(({ query }) => query),
-      debounceTime(500),
-      distinctUntilChanged(),
-      switchMap(query =>
-        this.productService.searchProducts(query).pipe(
-          map(products =>
-            ProductActions.searchProductsSuccess({ products })
-          )
-        )
-      ),
-      catchError(error =>
-        of(
-          ProductActions.searchProductsFailure({
-            error: error.message
-          })
-        )
-      )
     )
   )
+);
   deleteProduct$ = createEffect(() =>
   this.actions$.pipe(
     ofType(ProductActions.deleteProduct),

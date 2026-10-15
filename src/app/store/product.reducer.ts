@@ -12,23 +12,44 @@ export const initialState: ProductState = {
   deletingId: null,
   creating: false,
   productDetails: null,
-  sort: ''
+  // sort: '',
+  search: '',
+  page: 1,
+  limit: 10,
+  total: 0
 };
 
 export const productReducer = createReducer(
   initialState,
 
-  on(ProductActions.loadProducts, state => ({
+  // on(ProductActions.loadProducts, state => ({
+  //   ...state,
+  //   loading: true,
+  //   error: null,
+
+  // })),
+  on(ProductActions.loadProducts, (state, { page, limit }) => ({
     ...state,
     loading: true,
-    error: null
+    error: null,
+    page,
+    limit
   })),
 
-  on(ProductActions.loadProductsSuccess, (state, { products }) => ({
-    ...state,
-    products,
-    loading: false
-  })),
+  // on(ProductActions.loadProductsSuccess, (state, { products }) => ({
+  //   ...state,
+  //   products,
+  //   loading: false
+  // })),
+  on(
+    ProductActions.loadProductsSuccess,
+    (state, { products, total }) => ({
+      ...state,
+      products,
+      total,
+      loading: false
+    })
+  ),
 
   on(ProductActions.loadProductsFailure, (state, { error }) => ({
     ...state,
@@ -36,15 +57,33 @@ export const productReducer = createReducer(
     error
   })),
 
-  on(ProductActions.searchProducts, state => ({
-    ...state,
-    loading: true,
-    error: null
-  })),
+  // on(ProductActions.searchProducts, state => ({
+  //   ...state,
+  //   loading: true,
+  //   error: null
+  // })),
+  on(
+    ProductActions.searchProducts,
+    (state, { page, limit, query, sort }) => ({
+      ...state,
+      loading: true,
+      error: null,
+      search: query,
+      page,
+      limit,
+      // sort
+    })
+  ),
 
-  on(ProductActions.searchProductsSuccess, (state, { products }) => ({
+  // on(ProductActions.searchProductsSuccess, (state, { products }) => ({
+  //   ...state,
+  //   products
+  // })),
+  on(ProductActions.searchProductsSuccess, (state, { products, total }) => ({
     ...state,
-    products
+    products,
+    total,
+    loading: false
   })),
 
   on(ProductActions.searchProductsFailure, (state, { error }) => ({
@@ -112,40 +151,41 @@ export const productReducer = createReducer(
     error
   })),
   on(ProductActions.createProduct, state => ({
-  ...state,
-  creating: true,
-  error: null
-})),
+    ...state,
+    creating: true,
+    error: null
+  })),
   on(ProductActions.createProductSuccess, (state, { product }) => ({
-  ...state,
-  products: [...state.products, product],
-  creating: false,
-  error: null
-})),
+    ...state,
+    products: [...state.products, product],
+    creating: false,
+    error: null
+  })),
 
-on(ProductActions.createProductFailure, (state, { error }) => ({
-  ...state,
-  creating: false,
-  error
-})),
-on(ProductActions.loadProduct, state => ({
-  ...state,
-  loading: true,
-  error: null
-})),
-on(ProductActions.loadProductSuccess, (state, { product }) => ({
-  ...state,
-  productDetails: product,
-  loading: false,
-  error: null
-})),
-on(ProductActions.loadProductFailure, (state, { error }) => ({
-  ...state,
-  loading: false,
-  error
-})),
-on(ProductActions.setSort, (state, { sort }) => ({
-  ...state,
-  sort
-})),
+  on(ProductActions.createProductFailure, (state, { error }) => ({
+    ...state,
+    creating: false,
+    error
+  })),
+  on(ProductActions.loadProduct, state => ({
+    ...state,
+    loading: true,
+    error: null
+  })),
+  on(ProductActions.loadProductSuccess, (state, { product }) => ({
+    ...state,
+    productDetails: product,
+    loading: false,
+    error: null
+  })),
+  on(ProductActions.loadProductFailure, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error
+  })),
+  // on(ProductActions.setSort, (state, { sort }) => ({
+  //   ...state,
+  //   sort,
+  //   page: 1 // Reset to first page when sort changes
+  // })),
 );

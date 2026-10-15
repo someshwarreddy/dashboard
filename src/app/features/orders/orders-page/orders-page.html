@@ -1,0 +1,78 @@
+<div class="orders-page">
+    <div class="page-header">
+        <div>
+            <h1>Order Management</h1>
+            <p>View and manage customer orders.</p>
+        </div>
+    </div>
+
+    @if (loading()) {
+    <div class="loading-state">
+        Loading orders...
+    </div>
+    } @else if (error()) {
+    <div class="error-state">
+        {{ error() }}
+    </div>
+    } @else if (orders().length === 0) {
+    <div class="empty-state">
+        No orders found.
+    </div>
+    } @else {
+    <div class="orders-table-wrapper">
+        <table class="orders-table">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Customer ID</th>
+                    <th>Products</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                @for (order of orders(); track order.id) {
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>#{{ order.userId }}</td>
+                    <td>{{ order.totalProducts }}</td>
+                    <td>{{ order.totalQuantity }}</td>
+                    <td>{{ order.total | currency:'USD':'symbol':'1.2-2' }}</td>
+                    <td>
+                        <select [value]="statuses()[order.id] ?? 'Pending'" (change)="changeOrderStatus(
+      order.id,
+      $any($event.target).value
+    )">
+                            @for (status of statusOptions; track status) {
+                            <option [value]="status">{{ status }}</option>
+                            }
+                        </select>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <p class="orders-count">
+        Showing {{ orders().length }} of {{ total() }} orders
+    </p>
+    }
+
+</div>
+<div class="orders-pagination">
+    <button type="button" [disabled]="page() <= 1 || loading()" (click)="changePage(page() - 1)">
+        Previous
+    </button>
+
+    <span>
+        Page {{ page() }} of {{ Math.max(1, Math.ceil(total() / limit())) }}
+    </span>
+
+    <button type="button" [disabled]="page() >= Math.ceil(total() / limit()) || loading()"
+        (click)="changePage(page() + 1)">
+        Next
+    </button>
+</div>

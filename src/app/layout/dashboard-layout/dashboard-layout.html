@@ -1,0 +1,124 @@
+<div class="dashboard-layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <span class="brand-mark">E</span>
+            <span>Enterprise</span>
+        </div>
+
+        <!-- <div class="nav-section">
+      <p class="nav-heading">MAIN MENU</p>
+
+      <a routerLink="/dashboard" routerLinkActive="active"
+         [routerLinkActiveOptions]="{ exact: true }">
+        <span class="nav-icon">⌂</span>
+        <span>Dashboard</span>
+      </a>
+
+      <a routerLink="/products" routerLinkActive="active">
+        <span class="nav-icon">▦</span>
+        <span>Products</span>
+      </a>
+
+      <a routerLink="/orders" routerLinkActive="active">
+        <span class="nav-icon">▤</span>
+        <span>Orders</span>
+      </a>
+
+      <a routerLink="/customers" routerLinkActive="active">
+        <span class="nav-icon">♙</span>
+        <span>Customers</span>
+      </a>
+
+      <a routerLink="/reports" routerLinkActive="active">
+        <span class="nav-icon">▥</span>
+        <span>Reports</span>
+      </a>
+    </div> -->
+
+        <div class="nav-section">
+            <p class="nav-heading">MAIN MENU</p>
+
+            <a routerLink="/products" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                <span class="nav-icon">▦</span>
+                <span>Products</span>
+            </a>
+
+            <a routerLink="/admin/users" routerLinkActive="active">
+                <span class="nav-icon">♙</span>
+                <span>Users</span>
+            </a>
+
+            <a routerLink="/admin/reports" routerLinkActive="active">
+                <span class="nav-icon">▥</span>
+                <span>Reports</span>
+            </a>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a routerLink="/settings" routerLinkActive="active">
+                <span class="nav-icon">⚙</span>
+                <span>Settings</span>
+            </a>
+        </div>
+    </aside>
+
+    <div class="main-area">
+        <header class="topbar">
+            <div class="breadcrumb">
+                <span>Workspace</span>
+                <span>/</span>
+                <strong>Enterprise Dashboard</strong>
+            </div>
+
+            <div class="topbar-actions">
+                <button type="button" class="notification-button" [routerLink]="[
+                  '/',
+                  { outlets: { sidebar: ['notifications'] } }
+                ]" aria-label="Notifications">
+                    ♧
+                    <span class="notification-dot"></span>
+                </button>
+
+
+                <div class="profile-menu" appClickOutside (appClickOutside)="closeProfileMenu()">
+                    <button type="button" class="profile-trigger" (click)="toggleProfileMenu()"
+                        [attr.aria-expanded]="profileMenuOpen()" aria-label="Toggle profile menu">
+                        <div class="avatar">{{ userInitial() }}</div>
+
+                        <div class="profile-info">
+                            <strong>{{ userName() }}</strong>
+                            <span>{{ userRole() }}</span>
+                        </div>
+
+                        <span class="profile-chevron">
+                            {{ profileMenuOpen() ? '▲' : '▼' }}
+                        </span>
+                    </button>
+
+                    @if (profileMenuOpen()) {
+                    <div class="profile-dropdown">
+                        <div class="dropdown-user">
+                            <strong>{{ userName() }}</strong>
+                            <span>{{ userRole() }}</span>
+                        </div>
+
+                        <div class="dropdown-divider"></div>
+
+                        <button type="button" class="dropdown-item logout-item" (click)="logout()">
+                            <span>↪</span>
+                            Logout
+                        </button>
+                    </div>
+                    }
+                </div>
+
+            </div>
+        </header>
+
+        <main class="page-content">
+            <router-outlet />
+        </main>
+    </div>
+
+</div>

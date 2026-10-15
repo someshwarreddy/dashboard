@@ -9,15 +9,17 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth-interceptor';
 import { authReducer } from './store/auth.reducer';
 import { AuthEffects } from './store/auth.effects';
+import { orderReducer } from './store/order.reducer';
+import { OrderEffects } from './store/order.effects';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
-    provideStore({ product: productReducer, auth: authReducer }),
+    provideStore({ product: productReducer, auth: authReducer,  orders: orderReducer }),
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),
-    provideEffects([ProductEffects, AuthEffects])
+    provideEffects([ProductEffects, AuthEffects, OrderEffects])
   ]
 };
 
