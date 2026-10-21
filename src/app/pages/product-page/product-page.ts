@@ -86,7 +86,12 @@ export class ProductPage implements OnInit {
   const sort = params.get('sort') ?? '';
   const page = Number(params.get('page') ?? 1);
   const limit = this.limit();
-
+console.log('PRODUCT PAGE RELOADING:', {
+  search,
+  page,
+  limit,
+  currentProducts: this.products().length
+});
   if (search.trim()) {
     this.store.dispatch(
       ProductActions.searchProducts({

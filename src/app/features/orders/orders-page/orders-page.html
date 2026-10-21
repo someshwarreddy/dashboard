@@ -41,10 +41,11 @@
                     <td>{{ order.totalQuantity }}</td>
                     <td>{{ order.total | currency:'USD':'symbol':'1.2-2' }}</td>
                     <td>
-                        <select [value]="statuses()[order.id] ?? 'Pending'" (change)="changeOrderStatus(
-      order.id,
-      $any($event.target).value
-    )">
+<select
+  [ngModel]="statuses()[order.id] ?? 'Pending'"
+  (ngModelChange)="changeOrderStatus(order.id, $any($event))"
+>
+ 
                             @for (status of statusOptions; track status) {
                             <option [value]="status">{{ status }}</option>
                             }

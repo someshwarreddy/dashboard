@@ -28,7 +28,7 @@ export interface ProductState {
   products: Product[];
   loading: boolean;
   error: string | null;
-
+ localProducts: Product[]; // Add this line
   selectedProductId: number | null;
   deletingId: number | null;
   creating: boolean;

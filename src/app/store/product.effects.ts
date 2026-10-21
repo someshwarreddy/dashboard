@@ -248,11 +248,20 @@ createProduct$ = createEffect(() =>
     switchMap(({ product }) =>
       this.productService.createProduct(product).pipe(
 
-        map(createdProduct =>
-          ProductActions.createProductSuccess({
-            product: createdProduct
-          })
-        ),
+        // map(createdProduct =>
+          
+        //   ProductActions.createProductSuccess({
+            
+        //     product: createdProduct
+        //   })
+        // ),
+        map(createdProduct => {
+  console.log('CREATE SUCCESS:', createdProduct);
+
+  return ProductActions.createProductSuccess({
+    product: createdProduct
+  });
+}),
 
         catchError(error =>
           of(

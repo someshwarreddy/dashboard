@@ -8,6 +8,24 @@
         ) {
         <small>Title is required</small>
         }
+        @if (
+        productForm.controls.title.touched &&
+        productForm.controls.title.hasError('whitespace')
+        ) {
+        <small>Title cannot contain only spaces</small>
+        }
+        @if (
+        productForm.controls.title.touched &&
+        productForm.controls.title.hasError('minlength')
+        ) {
+        <small>Title must contain at least 3 characters</small>
+        }
+        @if (
+  productForm.controls.title.touched &&
+  productForm.controls.title.hasError('maxlength')
+) {
+  <small>Title cannot exceed 50 characters</small>
+}
     </label>
 
     <label>
@@ -30,7 +48,7 @@
 
     <label>
         Product Image:
-        <input type="file"  #fileInput accept="image/*" (change)="onImageSelected($event)" />
+        <input type="file" #fileInput accept="image/*" (change)="onImageSelected($event)" />
         @if (imageError) {
         <small>{{ imageError }}</small>
         }
@@ -41,12 +59,12 @@
     }
 
     <button type="submit">
-     Save Product
+        Save Product
+    </button>
+    <button type="button" (click)="addTitleMaxLengthValidator()">
+        Enable 50-character limit
     </button>
 </form>
 @if (showUnsavedDialog()) {
-  <app-unsaved-changes-dialog
-    (stay)="onStay()"
-    (leave)="onLeave()"
-  />
+<app-unsaved-changes-dialog (stay)="onStay()" (leave)="onLeave()" />
 }

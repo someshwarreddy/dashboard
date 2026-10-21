@@ -5,7 +5,11 @@ const selectProductState = createFeatureSelector<ProductState>('product');
 
 export const selectProducts = createSelector(
   selectProductState,
-  (productState) => productState.products
+  // (productState) => productState.products
+   (productState) => [
+    ...productState.localProducts,
+    ...productState.products
+  ]
 );
  export const selectLoading = createSelector(
   selectProductState,

@@ -8,6 +8,7 @@ export const initialState: ProductState = {
   products: [],
   loading: false,
   error: null,
+   localProducts: [],
   selectedProductId: null,
   deletingId: null,
   creating: false,
@@ -155,12 +156,31 @@ export const productReducer = createReducer(
     creating: true,
     error: null
   })),
-  on(ProductActions.createProductSuccess, (state, { product }) => ({
+  // on(ProductActions.createProductSuccess, (state, { product }) => ({
+  //   ...state,
+  //   products: [...state.products, product],
+  //   creating: false,
+  //   error: null,
+    
+  // })),
+  on(ProductActions.createProductSuccess, (state, { product }) => {
+  const nextState = {
     ...state,
-    products: [...state.products, product],
+    // products: [...state.products, product],
+     localProducts: [...state.localProducts, product],
     creating: false,
     error: null
-  })),
+  };
+
+  console.log(
+    'Reducer received created product:',
+    product,
+    'Total products:',
+    nextState.products.length
+  );
+
+  return nextState;
+}),
 
   on(ProductActions.createProductFailure, (state, { error }) => ({
     ...state,

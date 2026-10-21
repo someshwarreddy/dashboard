@@ -7,6 +7,8 @@ import { Actions, ofType } from '@ngrx/effects';
 import * as ProductActions from '../../store/product.actions';
 import { Router } from '@angular/router';
 import { UnsavedChangesDialog } from '../unsaved-changes-dialog/unsaved-changes-dialog';
+import { ProductValidators } from
+  '../../shared/validators/product.validators';
 @Component({
   selector: 'app-product-form',
   imports: [ReactiveFormsModule, UnsavedChangesDialog],
@@ -19,6 +21,7 @@ export class ProductForm {
   private fb = inject(FormBuilder);
   product = input<Product | null>(null);
   imageError = '';
+  private isSaving = signal(false);
   showUnsavedDialog = signal(false);
   private actions$ = inject(Actions);
   private router = inject(Router);
@@ -56,14 +59,30 @@ export class ProductForm {
         takeUntilDestroyed()
       )
       .subscribe(() => {
+        // this.isSaving.set(false);
         this.router.navigate(['/products']);
       });
 
   }
-  productForm = this.fb.group({
-    title: ['', [Validators.required]],
-    price: [0, [Validators.required, Validators.min(1)]]
-  });
+productForm = this.fb.group({
+  title: [
+    '',
+    [
+      ProductValidators.titleRequired,
+      ProductValidators.titleMinLength,
+      // ProductValidators.titleMaxLength,
+      ProductValidators.titleNoWhitespace
+    ],
+  ],
+  price: [
+    0,
+    [
+      ProductValidators.priceRequired,
+      ProductValidators.priceMin,
+
+    ],
+  ],
+});
 
   @ViewChild('fileInput')
   fileInput!: ElementRef<HTMLInputElement>;
@@ -94,7 +113,7 @@ export class ProductForm {
       price: Number(this.productForm.value.price ?? 0),
       image: this.imageFile!
     };
-
+  this.isSaving.set(true);
     // this.create.emit(product);
     this.save.emit(product);
   }
@@ -126,6 +145,9 @@ export class ProductForm {
   //   return !this.productForm.dirty;
   // }
   canDeactivate(): boolean | Promise<boolean> {
+ if (this.isSaving()) {
+    return true;
+  }
 
   if (!this.productForm.dirty) {
     return true;
@@ -136,5 +158,11 @@ export class ProductForm {
   return new Promise<boolean>(resolve => {
     this.navigationDecision = resolve;
   });
+}
+addTitleMaxLengthValidator(): void {
+  const title = this.productForm.controls.title;
+
+  title.addValidators(ProductValidators.titleMaxLength);
+  title.updateValueAndValidity();
 }
 }

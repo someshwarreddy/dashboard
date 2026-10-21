@@ -1,5 +1,5 @@
 
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../store/auth.selectors';
@@ -20,21 +20,28 @@ export class DashboardLayout {
   userName = computed(() => this.user()?.name ?? 'User');
 
   userRole = computed(() => this.user()?.role ?? 'User');
+  profileMenuOpen = signal(false);
 
   userInitial = computed(() => {
     const name = this.userName().trim();
     return name ? name.charAt(0).toUpperCase() : 'U';
   });
+  constructor() {
+    effect(() => {
+      const navigation = this.router.currentNavigation();
+
+      console.log('Current navigation:', navigation);
+    });
+  }
   logout(): void {
     this.store.dispatch(logout());
     this.router.navigate(['/login']);
   }
-  profileMenuOpen = signal(false);
 
   toggleProfileMenu(): void {
     this.profileMenuOpen.update(open => !open);
   }
   closeProfileMenu(): void {
-  this.profileMenuOpen.set(false);
-}
+    this.profileMenuOpen.set(false);
+  }
 }

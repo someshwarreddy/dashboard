@@ -43,9 +43,11 @@ productFormComponent!: ProductForm;
     ProductSelectors.selectProductDetails
   );
   saveProduct(product: CreateProduct) {
+     console.log('STEP 1: Parent received product:', product);
     const id = this.productId();
-
+ 
     if (id === null) {
+         console.log('STEP 2: Dispatching createProduct');
       // CREATE
       this.store.dispatch(
         ProductActions.createProduct({ product })
