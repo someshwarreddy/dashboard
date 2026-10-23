@@ -37,3 +37,12 @@ export const selectOrderStatuses = createSelector(
   selectOrderState,
   state => state.statuses
 );
+export const selectOrderPage = createSelector(
+  selectOrderState,
+  (state) => state.page
+);
+
+export const selectOrderLimit = createSelector(
+  selectOrderState,
+  (state) => state.limit
+);

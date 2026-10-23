@@ -1,10 +1,12 @@
 
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../store/auth.selectors';
 import { logout } from '../../store/auth.actions';
 import { ClickOutside } from '../../shared/click-outside';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
@@ -30,8 +32,22 @@ export class DashboardLayout {
     effect(() => {
       const navigation = this.router.currentNavigation();
 
-      console.log('Current navigation:', navigation);
+      // console.log('Current navigation:', navigation);
     });
+ this.router.events
+      .pipe(
+        filter(event =>
+          event instanceof NavigationStart ||
+          event instanceof NavigationEnd ||
+          event instanceof NavigationCancel ||
+          event instanceof NavigationError
+        ),
+        takeUntilDestroyed()
+      )
+      .subscribe(event => {
+        // console.log('ROUTER EVENT:', event);
+      });
+   
   }
   logout(): void {
     this.store.dispatch(logout());
@@ -44,4 +60,5 @@ export class DashboardLayout {
   closeProfileMenu(): void {
     this.profileMenuOpen.set(false);
   }
+
 }
