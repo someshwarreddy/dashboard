@@ -4,98 +4,10 @@ import { CreateProduct, Product, ProductApiResponse, ProductApi,  ProductListRes
 import { HttpClient } from '@angular/common/http';
 @Service()
 export class ProductService {
-  //    getProducts(): Observable<Product[]> {
-  //   return of([
-  //     { id: 1, name: 'Laptop', price: 50000 },
-  //     { id: 2, name: 'Phone', price: 30000 },
-  //     { id: 3, name: 'Headphones', price: 5000 }
-  //   ]);
-  // }
-  //  getProducts(): Observable<Product[]> {
-  //   return throwError(() => new Error('Failed to load products'));
-  // }
+ 
  private http = inject(HttpClient);
 
-// getProducts(): Observable<Product[]> {
-//   return this.http
-//     .get<ProductApiResponse>('https://dummyjson.com/products')
-//     .pipe(
-//       map(response =>
-//         response.products.map(product => ({
-//           id: product.id,
-//           name: product.title,
-//           price: product.price
-//         }))
-//       )
-//     );
-// }
-// getProducts(): Observable<Product[]> {
-//   return this.http.get<ProductApiResponse>(
-//     'https://dummyjson.com/products'
-//     //  'https://dummyjson.com/products-invalid'
-//   ).pipe(
-//     map(response => response.products)
-//   );
-// }
-// getProducts(): Observable<Product[]> {
-//   return this.http
-//     .get<ProductApiResponse>('https://dummyjson.com/products')
-//     .pipe(
-//       map(response =>
-//         response.products.map(product => ({
-//           id: product.id,
-//           title: product.title,
-//           price: product.price,
-//           image: product.thumbnail
-//         }))
-//       )
-//     );
-// }
-// getProducts(
-//   page: number,
-//   limit: number
-// ): Observable<ProductListResponse> {
-//   const skip = (page - 1) * limit;
 
-//   return this.http
-//     .get<ProductApiResponse>(
-//       `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
-//     )
-//     .pipe(
-//       map(response => ({
-//         products: response.products.map(product => ({
-//           id: product.id,
-//           title: product.title,
-//           price: product.price,
-//           image: product.thumbnail
-//         })),
-//         total: response.total
-//       }))
-//     );
-// }
-// getProducts(
-//   page: number,
-//   limit: number
-// ): Observable<{ products: Product[]; total: number }> {
-
-//   const skip = (page - 1) * limit;
-
-//   return this.http
-//     .get<ProductApiResponse>(
-//       `https://dummyjson.com/products?limit=${limit}&skip=${skip}`
-//     )
-//     .pipe(
-//       map(response => ({
-//         products: response.products.map(product => ({
-//           id: product.id,
-//           title: product.title,
-//           price: product.price,
-//           image: product.thumbnail
-//         })),
-//         total: response.total
-//       }))
-//     );
-// }
 getProducts(
   page: number,
   limit: number,
@@ -127,56 +39,7 @@ getProducts(
       }))
     );
 }
-// searchProducts(query: string): Observable<Product[]> {
-//   return this.http
-//     .get<ProductApiResponse>(
-//       `https://dummyjson.com/products/search?q=${query}`
-//       // `https://dummyjson.com/products-invalid/search?q=${query}`
-//     )
-//     .pipe(
-//       map(response => response.products)
-//     );
-// }
-// searchProducts(query: string): Observable<Product[]> {
-//   return this.http
-//     .get<ProductApiResponse>(
-//       `https://dummyjson.com/products/search?q=${query}`
-//     )
-//     .pipe(
-//       map(response =>
-//         response.products.map(product => ({
-//           id: product.id,
-//           title: product.title,
-//           price: product.price,
-//           image: product.thumbnail
-//         }))
-//       )
-//     );
-// }
 
-// searchProducts(
-//   query: string,
-//   page: number,
-//   limit: number
-// ): Observable<{ products: Product[]; total: number }> {
-//   const skip = (page - 1) * limit;
-
-//   return this.http
-//     .get<ProductApiResponse>(
-//       `https://dummyjson.com/products/search?q=${query}&limit=${limit}&skip=${skip}`
-//     )
-//     .pipe(
-//       map(response => ({
-//         products: response.products.map(product => ({
-//           id: product.id,
-//           title: product.title,
-//           price: product.price,
-//           image: product.thumbnail
-//         })),
-//         total: response.total
-//       }))
-//     );
-// }
 searchProducts(
   query: string,
   page: number,
