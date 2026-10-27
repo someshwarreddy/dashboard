@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { catchError, concatMap, forkJoin, from, map, mergeMap, of, switchMap, toArray, withLatestFrom } from 'rxjs';
+import { catchError, concatMap, finalize, forkJoin, from, map, mergeMap, of, retry, switchMap, tap, toArray, withLatestFrom } from 'rxjs';
 import { OrderService } from '../services/order.service';
 import {
   loadOrders,
@@ -11,7 +11,8 @@ import {
   loadOrderDashboardSummaryFailure,
   loadOrderDashboardSummarySuccess,
   loadOrderDashboardSummary,
-  refreshOrders
+  refreshOrders,
+  testOrderRetry
 } from './order.actions';
 import { selectOrderLimit, selectOrderPage } from './order.selectors';
 import { Store } from '@ngrx/store';
@@ -118,6 +119,28 @@ export class OrderEffects {
       loadOrders({ page, limit })
     )
   )
+);
+testOrderRetry$ = createEffect(
+  () =>
+    this.actions$.pipe(
+      ofType(testOrderRetry),
+      switchMap(() =>
+        this.orderService.getOrders(1, 10).pipe(
+          retry(2),
+          tap(() => {
+            console.log('Request succeeded');
+          }),
+          catchError(error => {
+            console.error('All retry attempts failed:', error);
+            return of(null);
+          }),
+           finalize(() => {
+    console.log('Request finished or cancelled');
+  })
+        )
+      )
+    ),
+  { dispatch: false }
 );
 }
 

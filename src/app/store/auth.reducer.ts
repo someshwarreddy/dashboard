@@ -28,8 +28,8 @@ export const authReducer = createReducer(
   //   error: null
   // })),
   on(AuthActions.loginSuccess, (state, { token }) => {
-    console.log('LOGIN SUCCESS REACHED REDUCER');
-    console.log('TOKEN:', token);
+    // console.log('LOGIN SUCCESS REACHED REDUCER');
+    // console.log('TOKEN:', token);
 
     return {
       ...state,

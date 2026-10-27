@@ -72,3 +72,6 @@ export const loadOrderDashboardSummaryFailure = createAction(
 export const refreshOrders = createAction(
   '[Orders] Refresh Orders'
 );
+export const testOrderRetry = createAction(
+  '[Orders Learning] Test Retry'
+);

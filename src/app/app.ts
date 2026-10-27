@@ -9,7 +9,7 @@ import { Navbar } from './components/navbar/navbar';
 import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Navbar],
+  imports: [RouterOutlet,],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })

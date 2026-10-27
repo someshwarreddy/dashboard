@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { loadMultipleCarts, loadMultipleCartsSequentially, loadOrderDashboardSummary, loadOrders, refreshOrders } from '../../../store/order.actions';
+import { loadMultipleCarts, loadMultipleCartsSequentially, loadOrderDashboardSummary, loadOrders, refreshOrders, testOrderRetry } from '../../../store/order.actions';
 import { OrderStatus } from '../../../models/order';
 import { updateOrderStatus, restoreOrderStatuses } from '../../../store/order.actions';
 import { selectOrderStatuses } from '../../../store/order.selectors';
@@ -137,5 +137,8 @@ refresh$.next();
 }
 refresh(): void {
   this.store.dispatch(refreshOrders());
+}
+testRetry(): void {
+  this.store.dispatch(testOrderRetry());
 }
 }

@@ -1,0 +1,269 @@
+:host {
+  display: block;
+  padding: 24px;
+  color: #111827;
+}
+
+.orders-page {
+  width: 100%;
+  min-width: 0;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 6px;
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+    font-size: 14px;
+  }
+}
+
+.orders-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 4%);
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  white-space: nowrap;
+
+  thead {
+    background: #f9fafb;
+
+    th {
+      padding: 15px 18px;
+      color: #4b5563;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: left;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      border-bottom: 1px solid #e5e7eb;
+    }
+  }
+
+  tbody {
+    tr {
+      transition: background-color 0.15s ease;
+
+      &:hover {
+        background: #f9fafb;
+      }
+
+      &:last-child td {
+        border-bottom: none;
+      }
+    }
+
+    td {
+      padding: 15px 18px;
+      color: #374151;
+      font-size: 14px;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    td:first-child {
+      color: #111827;
+      font-weight: 600;
+    }
+  }
+
+  select {
+    min-width: 125px;
+    padding: 8px 30px 8px 10px;
+    color: #374151;
+    background-color: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font: inherit;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgb(37 99 235 / 12%);
+    }
+  }
+}
+
+.loading-state,
+.error-state,
+.empty-state {
+  padding: 40px 24px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.loading-state {
+  color: #6b7280;
+}
+
+.error-state {
+  color: #b91c1c;
+  background: #fef2f2;
+  border-color: #fecaca;
+}
+
+.empty-state {
+  color: #6b7280;
+}
+
+.orders-count {
+  margin: 16px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.orders-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 20px;
+
+  span {
+    color: #4b5563;
+    font-size: 14px;
+  }
+
+  button {
+    padding: 9px 16px;
+    color: #374151;
+    background: #ffffff;
+    border: 1px solid #d1d5db;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: #f3f4f6;
+      border-color: #9ca3af;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+}
+
+:host > button {
+  margin: 16px 10px 0 0;
+  padding: 10px 15px;
+  color: #ffffff;
+  background: #111827;
+  border: 1px solid #111827;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: #374151;
+    border-color: #374151;
+  }
+
+  &:focus-visible {
+    outline: 3px solid rgb(37 99 235 / 30%);
+    outline-offset: 2px;
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 16px;
+  }
+
+  .page-header h1 {
+    font-size: 23px;
+  }
+
+  .orders-table {
+    min-width: 760px;
+  }
+
+  .orders-pagination {
+    justify-content: space-between;
+    gap: 10px;
+  }
+
+  :host > button {
+    margin-right: 6px;
+    margin-top: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  :host {
+    padding: 12px;
+  }
+
+  .page-header {
+    margin-bottom: 18px;
+  }
+
+  .orders-pagination {
+    span {
+      order: -1;
+      width: 100%;
+      text-align: center;
+    }
+  }
+}
+.refresh-button {
+  padding: 10px 16px;
+  color: #ffffff;
+  background: #111827;
+  border: 1px solid #111827;
+  border-radius: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  margin-top: 10px;
+
+  &:hover:not(:disabled) {
+    background: #374151;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-header {
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .refresh-button {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}

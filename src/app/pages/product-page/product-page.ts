@@ -16,7 +16,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-product-page',
-  imports: [ReactiveFormsModule, ProductList, ProductSearch, RouterLink],
+  imports: [ReactiveFormsModule, ProductList, ProductSearch, ],
   templateUrl: './product-page.html',
   styleUrl: './product-page.scss',
 })

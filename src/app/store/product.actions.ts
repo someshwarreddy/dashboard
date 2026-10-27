@@ -3,20 +3,6 @@ import { Product, CreateProduct } from '../models/product';
 
 
 // load product actions
-// export const loadProducts = createAction(
-//   '[Product] Load Products'
-// );
-
-// export const loadProductsSuccess = createAction(
-//   '[Product] Load Products Success',
-//   props<{ products: Product[] }>()
-// );
-
-// export const loadProductsFailure = createAction(
-//   '[Product] Load Products Failure',
-//   props<{ error: string }>()
-// );
-// load product actions
 export const loadProducts = createAction(
   '[Product] Load Products',
   props<{
@@ -50,10 +36,7 @@ export const searchProducts = createAction(
   }>()
 );
 
-// export const searchProductsSuccess = createAction(
-//   '[Product] Search Products Success',
-//   props<{ products: Product[] }>()
-// );
+
 export const searchProductsSuccess = createAction(
   '[Product] Search Products Success',
   props<{

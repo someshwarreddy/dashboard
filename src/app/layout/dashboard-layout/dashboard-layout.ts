@@ -45,7 +45,7 @@ export class DashboardLayout {
         takeUntilDestroyed()
       )
       .subscribe(event => {
-        // console.log('ROUTER EVENT:', event);
+        console.log('ROUTER EVENT:', event);
       });
    
   }

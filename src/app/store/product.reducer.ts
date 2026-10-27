@@ -89,7 +89,8 @@ export const productReducer = createReducer(
 
   on(ProductActions.searchProductsFailure, (state, { error }) => ({
     ...state,
-    error
+    error,
+    loading: false
   })),
 
   // select product reducer
