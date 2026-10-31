@@ -21,11 +21,11 @@
         <small>Title must contain at least 3 characters</small>
         }
         @if (
-  productForm.controls.title.touched &&
-  productForm.controls.title.hasError('maxlength')
-) {
-  <small>Title cannot exceed 50 characters</small>
-}
+        productForm.controls.title.touched &&
+        productForm.controls.title.hasError('maxlength')
+        ) {
+        <small>Title cannot exceed 50 characters</small>
+        }
     </label>
 
     <label>

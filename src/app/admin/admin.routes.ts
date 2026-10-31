@@ -16,7 +16,7 @@ export const ADMIN_ROUTES: Routes = [
         .then(m => m.ReportsPage)
   },
   {
-    path: 'reports',
+    path: 'oldreports',
     loadComponent: () =>
       import('../pages/old-reports-page/old-reports-page')
         .then(m => m.OldReportsPage)

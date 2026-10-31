@@ -15,6 +15,7 @@ import { productResolver } from './resolvers/product.resolver';
 import { NotificationSidebar } from './components/notification-sidebar/notification-sidebar';
 import { DashboardLayout } from './layout/dashboard-layout/dashboard-layout';
 import { OrdersPage } from './features/orders/orders-page/orders-page';
+import { UnauthorizedPage } from './pages/unauthorized-page/unauthorized-page';
 // export const routes: Routes = [
 //   {
 //     path: '',
@@ -196,7 +197,10 @@ export const routes: Routes = [
     component: NotificationSidebar,
     outlet: 'sidebar'
   },
-
+  {
+    path: 'unauthorized',
+    component: UnauthorizedPage
+  },
   {
     path: '**',
     component: NotFoundPage

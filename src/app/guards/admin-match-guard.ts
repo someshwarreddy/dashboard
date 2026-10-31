@@ -23,7 +23,12 @@ export const adminMatchGuard: CanMatchFn = () => {
         return router.createUrlTree(['/login']);
       }
 
-      return user.role === 'admin';
+      if (user.role !== 'admin') {
+        return router.createUrlTree(['/unauthorized']);
+      }
+
+      return true;
+
     })
   );
 };

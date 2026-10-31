@@ -24,6 +24,7 @@ export class AuthService {
       { params }
     );
   }
+  
   register(user: {
   name: string;
   email: string;

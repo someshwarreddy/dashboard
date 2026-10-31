@@ -14,4 +14,13 @@ describe('newReportsMatchGuard', () => {
   it('should be created', () => {
     expect(executeGuard).toBeTruthy();
   });
+   it('1. should return true when new reports are enabled', () => {
+    const result = newReportsMatchGuard(
+      {} as any,
+      [] as any,
+      {} as any
+    );
+
+    expect(result).toBe(true);
+  });
 });

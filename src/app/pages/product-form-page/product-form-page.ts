@@ -43,7 +43,7 @@ productFormComponent!: ProductForm;
     ProductSelectors.selectProductDetails
   );
   saveProduct(product: CreateProduct) {
-     console.log('STEP 1: Parent received product:', product);
+   
     const id = this.productId();
  
     if (id === null) {
@@ -76,11 +76,11 @@ productFormComponent!: ProductForm;
     );
   }
   canDeactivate():  boolean | Promise<boolean> {
-    console.log('🔥 ProductFormPage canDeactivate CALLED');
+
 
   const result = this.productFormComponent.canDeactivate();
 
-  console.log('🔥 ProductFormPage result:', result);
+ 
 
   return result;
 }

@@ -1,107 +1,19 @@
-<!-- <div class="product-container">
-
-  <h1>Product Management</h1>
-
-   old code <app-product-search (search)="searchProducts($event) " /> 
-  <app-product-search (search)="updateSearchUrl($event)" />
-  <select (change)="changeSort($any($event.target).value)">
-     old code <option value="">Sort</option> 
-    <option value="price-asc">Price: Low to High</option>
-    <option value="price-desc">Price: High to Low</option>
-  </select>
-  @if (loading()) {
-  <p class="loading">Loading products...</p>
-  }
-
-  @if (error()) {
-  <p class="error">{{ error() }}</p>
-  }
-
-  <app-product-list [products]="products()" (productDelete)="deleteProduct($event)"
-    (selectProduct)="selectProduct($event)" />
-
-  @if (totalPages() > 1) {
-  <div class="pagination">
-
-    <button type="button" (click)="changePage(page() - 1)" [disabled]="page() === 1">
-      Previous
-    </button>
-
-    @for (pageNumber of pages(); track pageNumber) {
-    <button type="button" (click)="changePage(pageNumber)" [disabled]="pageNumber === page()">
-      {{ pageNumber }}
-    </button>
-    }
-
-    <button type="button" (click)="changePage(page() + 1)" [disabled]="page() === totalPages()">
-      Next
-    </button>
-
-  </div>
-  }
-</div>
-
-old code  @if (selectedProduct(); as product) {
-<app-product-details [product]="product" (clear)="clearSelectedProduct()" (edit)="startEdit($event)" />
-}
-
-
-
-<app-product-form
- [product]="editingProduct"
-  (create)="createProduct($event)"
-/> old code 
-<button type="button" (click)="createProduct()">
-  + Create Product
-</button>
-
-<button [routerLink]="[
-      '/',
-    {
-      outlets: {
-        sidebar: ['notifications']
-      }
-    }
-  ]">
-  Notifications
-</button> -->
-
-
 <div class="product-container">
-
   <div class="page-heading">
-    <!-- <div>
-      <h1>Product Management</h1>
-      <p>Manage and organize your product inventory.</p>
-    </div> -->
-
     <div>
       <h1>Product Management</h1>
       <p>Manage and organize your product inventory.</p>
-
       <div class="product-summary">
         Showing {{ products().length }} products
       </div>
     </div>
-
-
     <button type="button" class="create-button" (click)="createProduct()">
       + Create Product
     </button>
   </div>
-
   <section class="product-panel">
-
     <div class="product-toolbar">
       <app-product-search (search)="updateSearchUrl($event)" />
-
-      <!-- <select
-        class="sort-select"
-        aria-label="Sort products"
-        (change)="changeSort($any($event.target).value)">
-        <option value="price-asc">Price: Low to High</option>
-        <option value="price-desc">Price: High to Low</option>
-      </select> -->
 
       <div class="sort-control">
         <label for="product-sort">Sort by</label>
@@ -112,18 +24,7 @@ old code  @if (selectedProduct(); as product) {
           <option value="price-desc">Price: High to Low</option>
         </select>
       </div>
-
     </div>
-
-    <!-- @if (loading()) {
-      <p class="loading">Loading products...</p>
-    }
-
-    @if (error()) {
-      <p class="error">{{ error() }}</p>
-    } -->
-
-
     @if (loading()) {
     <p class="loading">Loading products...</p>
     } @else if (error()) {
@@ -132,10 +33,6 @@ old code  @if (selectedProduct(); as product) {
     <app-product-list [products]="products()" (productDelete)="deleteProduct($event)"
       (selectProduct)="selectProduct($event)" />
     }
-
-
-
-
     @if (totalPages() > 1) {
     <div class="pagination">
       <button type="button" (click)="changePage(page() - 1)" [disabled]="page() === 1">
@@ -147,12 +44,10 @@ old code  @if (selectedProduct(); as product) {
         {{ pageNumber }}
       </button>
       }
-
       <button type="button" (click)="changePage(page() + 1)" [disabled]="page() === totalPages()">
         Next
       </button>
     </div>
     }
-
   </section>
 </div>

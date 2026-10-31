@@ -45,11 +45,6 @@ describe('orderReducer', () => {
         expect(state.statuses[orderId]).toBe(status);
     });
     it('should handle restoreOrderStatuses action', () => {
-        // const statuses = {
-        //     1: 'Pending',
-        //     2: 'Processing',
-        //     3: 'Delivered'
-        // } as const;
         const statuses: Record<number, 'Pending' | 'Processing' | 'Delivered'> = {
             1: 'Pending',
             2: 'Processing',

@@ -64,25 +64,25 @@ export class ProductForm {
       });
 
   }
-productForm = this.fb.group({
-  title: [
-    '',
-    [
-      ProductValidators.titleRequired,
-      ProductValidators.titleMinLength,
-      // ProductValidators.titleMaxLength,
-      ProductValidators.titleNoWhitespace
+  productForm = this.fb.group({
+    title: [
+      '',
+      [
+        ProductValidators.titleRequired,
+        ProductValidators.titleMinLength,
+        // ProductValidators.titleMaxLength,
+        ProductValidators.titleNoWhitespace
+      ],
     ],
-  ],
-  price: [
-    0,
-    [
-      ProductValidators.priceRequired,
-      ProductValidators.priceMin,
+    price: [
+      0,
+      [
+        ProductValidators.priceRequired,
+        ProductValidators.priceMin,
 
+      ],
     ],
-  ],
-});
+  });
 
   @ViewChild('fileInput')
   fileInput!: ElementRef<HTMLInputElement>;
@@ -113,7 +113,7 @@ productForm = this.fb.group({
       price: Number(this.productForm.value.price ?? 0),
       image: this.imageFile!
     };
-  this.isSaving.set(true);
+    this.isSaving.set(true);
     // this.create.emit(product);
     this.save.emit(product);
   }
@@ -139,30 +139,26 @@ productForm = this.fb.group({
     this.navigationDecision?.(true);
     this.navigationDecision = undefined;
   }
-  // canDeactivate(): boolean {
-  //   console.log('ProductForm canDeactivate called');
-  //   console.log('dirty:', this.productForm.dirty);
-  //   return !this.productForm.dirty;
-  // }
+
   canDeactivate(): boolean | Promise<boolean> {
- if (this.isSaving()) {
-    return true;
+    if (this.isSaving()) {
+      return true;
+    }
+
+    if (!this.productForm.dirty) {
+      return true;
+    }
+
+    this.showUnsavedDialog.set(true);
+
+    return new Promise<boolean>(resolve => {
+      this.navigationDecision = resolve;
+    });
   }
+  addTitleMaxLengthValidator(): void {
+    const title = this.productForm.controls.title;
 
-  if (!this.productForm.dirty) {
-    return true;
+    title.addValidators(ProductValidators.titleMaxLength);
+    title.updateValueAndValidity();
   }
-
-  this.showUnsavedDialog.set(true);
-
-  return new Promise<boolean>(resolve => {
-    this.navigationDecision = resolve;
-  });
-}
-addTitleMaxLengthValidator(): void {
-  const title = this.productForm.controls.title;
-
-  title.addValidators(ProductValidators.titleMaxLength);
-  title.updateValueAndValidity();
-}
 }

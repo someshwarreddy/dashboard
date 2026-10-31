@@ -1,17 +1,177 @@
 import { TestBed } from '@angular/core/testing';
-import { CanMatchFn } from '@angular/router';
+import { Router, UrlTree, provideRouter } from '@angular/router';
+import { provideMockStore, MockStore } from '@ngrx/store/testing';
+import { firstValueFrom, isObservable, Observable, timeout, TimeoutError } from 'rxjs';
 
 import { adminMatchGuard } from './admin-match-guard';
+import {
+  selectAuthInitialized,
+  selectUser
+} from '../store/auth.selectors';
 
 describe('adminMatchGuard', () => {
-  const executeGuard: CanMatchFn = (...guardParameters) =>
-    TestBed.runInInjectionContext(() => adminMatchGuard(...guardParameters));
+  let store: MockStore;
+  let router: Router;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [
+        provideMockStore(),
+        provideRouter([])
+      ]
+    });
+
+    store = TestBed.inject(MockStore);
+    router = TestBed.inject(Router);
   });
 
-  it('should be created', () => {
-    expect(executeGuard).toBeTruthy();
+  it('1. should allow navigation for an admin user', async () => {
+    store.overrideSelector(selectAuthInitialized, true);
+
+    store.overrideSelector(selectUser, {
+      id: 1,
+      name: 'Admin User',
+      role: 'admin'
+    } as any);
+
+    store.refreshState();
+
+    const result = await firstValueFrom(
+      TestBed.runInInjectionContext(() =>
+        adminMatchGuard(
+          {} as any,
+          [] as any,
+          {} as any
+        ) as any
+      )
+    );
+
+    expect(result).toBe(true);
   });
+  it('2. should redirect non-admin users to unauthorized page', async () => {
+    store.overrideSelector(selectAuthInitialized, true);
+
+    store.overrideSelector(selectUser, {
+      id: 2,
+      name: 'Normal User',
+      role: 'user'
+    } as any);
+
+    store.refreshState();
+
+    const guardResult = TestBed.runInInjectionContext(() =>
+      adminMatchGuard(
+        {} as any,
+        [] as any,
+        {} as any
+      )
+    );
+
+    const result = isObservable(guardResult)
+      ? await firstValueFrom(guardResult)
+      : await guardResult;
+    expect(result).toBeInstanceOf(UrlTree);
+
+    expect(router.serializeUrl(result as UrlTree))
+      .toBe('/unauthorized');
+  });
+  it('3. should redirect unauthenticated users to login', async () => {
+  store.overrideSelector(selectAuthInitialized, true);
+  store.overrideSelector(selectUser, null);
+  store.refreshState();
+
+  const guardResult = TestBed.runInInjectionContext(() =>
+    adminMatchGuard(
+      {} as any,
+      [] as any,
+      {} as any
+    ) 
+  );
+
+  const result = isObservable(guardResult)
+    ? await firstValueFrom(guardResult)
+    : await guardResult;
+
+  expect(result).toBeInstanceOf(UrlTree);
+
+  expect(router.serializeUrl(result as UrlTree))
+    .toBe('/login');
+});
+it('4. should wait until authentication is initialized', async () => {
+  store.overrideSelector(selectAuthInitialized, false);
+
+  store.overrideSelector(selectUser, {
+    id: 1,
+    name: 'Admin User',
+    role: 'admin'
+  } as any);
+
+  store.refreshState();
+
+  const guardResult = TestBed.runInInjectionContext(() =>
+    adminMatchGuard(
+      {} as any,
+      [] as any,
+      {} as any
+    ) as Observable<boolean | UrlTree>
+  );
+
+  const resultPromise = firstValueFrom(
+    guardResult 
+  );
+
+  store.overrideSelector(selectAuthInitialized, true);
+  store.refreshState();
+
+  const result = await resultPromise;
+
+  expect(result).toBe(true);
+});
+it('5. should not emit a result if authentication is never initialized', async () => {
+  store.overrideSelector(selectAuthInitialized, false);
+  store.overrideSelector(selectUser, null);
+  store.refreshState();
+
+  const guardResult = TestBed.runInInjectionContext(() =>
+    adminMatchGuard(
+      {} as any,
+      [] as any,
+      {} as any
+    )
+  );
+
+  const resultPromise = firstValueFrom(
+    (guardResult as Observable<boolean | UrlTree>).pipe(
+      timeout({ first: 100 })
+    )
+  );
+
+  await expect(resultPromise).rejects.toBeInstanceOf(TimeoutError);
+});
+it('6. should not redirect an admin user', async () => {
+  store.overrideSelector(selectAuthInitialized, true);
+
+  store.overrideSelector(selectUser, {
+    id: 1,
+    name: 'Admin User',
+    role: 'admin'
+  } as any);
+
+  store.refreshState();
+
+  const guardResult = TestBed.runInInjectionContext(() =>
+    adminMatchGuard(
+      {} as any,
+      [] as any,
+      {} as any
+    )
+  );
+
+  const result = isObservable(guardResult)
+    ? await firstValueFrom(guardResult)
+    : await guardResult;
+
+  expect(result).toBe(true);
+  expect(result).not.toBeInstanceOf(UrlTree);
+});
 });
