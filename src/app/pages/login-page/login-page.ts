@@ -33,14 +33,7 @@ export class LoginPage {
     password: ['', [Validators.required]]
   });
   returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-  // login(email: string, password: string) {
-  //   this.store.dispatch(
-  //     AuthActions.login({
-  //       email,
-  //       password
-  //     })
-  //   );
-  // }
+ 
   login() {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();

@@ -39,7 +39,7 @@ describe('ProductCard', () => {
   expect(title.textContent).toContain('Test Phone');
 });
 it('should emit product id when title is clicked', () => {
-  const selectSpy = vi.spyOn(component.select, 'emit');
+  const selectSpy = vi.spyOn(component.selectProduct, 'emit');
 
   fixture.detectChanges();
 

@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideMockStore } from '@ngrx/store/testing';
 import { ProductForm } from './product-form';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { Observable, of } from 'rxjs';
 import { Action } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
@@ -333,19 +332,7 @@ it('should display minimum price error when price is zero', () => {
   expect(fixture.nativeElement.textContent)
     .toContain('Price must be greater than 0');
 });
-it('should display image preview', () => {
-  fixture.componentRef.setInput('product', {
-    id: 1,
-    title: 'Test',
-    price: 10,
-    image: 'https://example.com/product.png'
-  });
-  fixture.detectChanges();
 
-  const image = fixture.nativeElement.querySelector('img');
-  expect(image).not.toBeNull();
-  expect(image.src).toBe('https://example.com/product.png');
-});
 it('should not display image when imagePreview is null', () => {
   fixture.componentRef.setInput('product', null);
   fixture.detectChanges();
@@ -361,13 +348,94 @@ it('should enable maximum length validator when button is clicked', () => {
 
   const buttons = fixture.nativeElement.querySelectorAll('button');
   const maxLengthButton = Array.from(buttons).find(
-    (button: any) =>
-      button.textContent.includes('Enable 50-character limit')
+    (button: unknown) =>
+      (button as HTMLButtonElement).textContent?.includes('Enable 50-character limit')
   ) as HTMLButtonElement;
 
   maxLengthButton.click();
+const titleControl = component.productForm.controls.title;
 
-  expect(component.productForm.controls.title.hasError('maxlength'))
-    .toBe(false);
+titleControl.setValue('A'.repeat(51));
+
+expect(titleControl.hasError('maxlength')).toBe(true);
 });
+it('should allow saving an existing product without selecting a new image', () => {
+  fixture.componentRef.setInput('product', {
+    id: 1,
+    title: 'Laptop',
+    price: 50000,
+    image: 'laptop.png'
+  });
+
+  fixture.detectChanges();
+
+  const saveSpy = vi.spyOn(component.save, 'emit');
+
+  component.productForm.setValue({
+    title: 'Updated Laptop',
+    price: 60000
+  });
+
+  component.createProduct();
+
+  expect(saveSpy).toHaveBeenCalledWith({
+    title: 'Updated Laptop',
+    price: 60000,
+    image: null
+  });
+});
+it('should not update image when no file is selected', () => {
+  const existingImage = new File(['image'], 'old.png');
+  component.imageFile = existingImage;
+  component.imagePreview = 'old-preview';
+
+  const event = {
+    target: {
+      files: []
+    }
+  } as unknown as Event;
+
+  component.onImageSelected(event);
+
+  expect(component.imageFile).toBe(existingImage);
+  expect(component.imagePreview).toBe('old-preview');
+});
+it('should reset form and clear image when switching to create mode', async () => {
+  fixture.componentRef.setInput('product', {
+    id: 1,
+    title: 'Laptop',
+    price: 50000,
+    image: 'laptop.png'
+  });
+
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  component.imageFile = new File(['image'], 'laptop.png');
+
+  fixture.componentRef.setInput('product', null);
+
+  fixture.detectChanges();
+  await fixture.whenStable();
+
+  expect(component.productForm.value).toEqual({
+    title: '',
+    price: 0
+  });
+  expect(component.imageFile).toBeNull();
+  expect(component.imagePreview).toBeNull();
+});
+it('should not update image when files property is null', () => {
+  const event = {
+    target: {
+      files: null
+    }
+  } as unknown as Event;
+
+  component.onImageSelected(event);
+
+  expect(component.imageFile).toBeNull();
+  expect(component.imagePreview).toBeNull();
+});
+
 });

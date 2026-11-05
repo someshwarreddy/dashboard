@@ -4,7 +4,6 @@ import { OrdersPage } from './orders-page';
 import { MockStore, provideMockStore } from '@ngrx/store/testing';
 import { provideRouter } from '@angular/router';
 import { initialOrderState as initialOrderState } from '../../../store/order.reducer';
-import { Store } from '@ngrx/store';
 import { loadOrders, refreshOrders, restoreOrderStatuses, updateOrderStatus } from '../../../store/order.actions';
 import { Order } from '../../../models/order';
 describe('OrdersPage', () => {

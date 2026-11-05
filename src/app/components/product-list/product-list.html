@@ -1,13 +1,4 @@
-<!-- 
-<div class="products">
-@for (product of products(); track product.id) {
-  <app-product-card
-    [product]="product"
-  (delete)="productDelete.emit($event)"
-  (select)="selectProduct.emit($event)"
-  />
-}
-</div> -->
+
 
 
 <div class="products-table-wrapper">
@@ -28,7 +19,7 @@
             <app-product-card
               [product]="product"
               (delete)="productDelete.emit($event)"
-              (select)="selectProduct.emit($event)"
+              (selectProduct)="selectProduct.emit($event)"
             />
           </td>
           <td>

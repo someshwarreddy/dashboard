@@ -39,6 +39,7 @@ export class OrderEffects {
       )
     )
   );
+  // Effect to load multiple carts concurrently
   loadMultipleCarts$ = createEffect(() =>
     this.actions$.pipe(
       ofType(loadMultipleCarts),
@@ -115,13 +116,12 @@ export class OrderEffects {
       this.store.select(selectOrderPage),
       this.store.select(selectOrderLimit)
     ),
-    map(([_, page, limit]) =>
+    map(([, page, limit]) =>
       loadOrders({ page, limit })
     )
   )
 );
-testOrderRetry$ = createEffect(
-  () =>
+testOrderRetry$ = createEffect(() =>
     this.actions$.pipe(
       ofType(testOrderRetry),
       switchMap(() =>

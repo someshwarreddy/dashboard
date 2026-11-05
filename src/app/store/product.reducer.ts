@@ -1,6 +1,6 @@
 import { createReducer, on } from '@ngrx/store';
 import * as ProductActions from './product.actions';
-import { Product, ProductState } from '../models/product';
+import {  ProductState } from '../models/product';
 
 
 
@@ -23,12 +23,7 @@ export const initialState: ProductState = {
 export const productReducer = createReducer(
   initialState,
 
-  // on(ProductActions.loadProducts, state => ({
-  //   ...state,
-  //   loading: true,
-  //   error: null,
-
-  // })),
+ 
   on(ProductActions.loadProducts, (state, { page, limit }) => ({
     ...state,
     loading: true,
@@ -58,28 +53,20 @@ export const productReducer = createReducer(
     error
   })),
 
-  // on(ProductActions.searchProducts, state => ({
-  //   ...state,
-  //   loading: true,
-  //   error: null
-  // })),
   on(
     ProductActions.searchProducts,
-    (state, { page, limit, query, sort }) => ({
+    (state, { page, limit, query,  }) => ({
       ...state,
       loading: true,
       error: null,
       search: query,
       page,
       limit,
-      // sort
+    
     })
   ),
 
-  // on(ProductActions.searchProductsSuccess, (state, { products }) => ({
-  //   ...state,
-  //   products
-  // })),
+ 
   on(ProductActions.searchProductsSuccess, (state, { products, total }) => ({
     ...state,
     products,
@@ -157,13 +144,7 @@ export const productReducer = createReducer(
     creating: true,
     error: null
   })),
-  // on(ProductActions.createProductSuccess, (state, { product }) => ({
-  //   ...state,
-  //   products: [...state.products, product],
-  //   creating: false,
-  //   error: null,
-    
-  // })),
+ 
   on(ProductActions.createProductSuccess, (state, { product }) => {
   const nextState = {
     ...state,
@@ -204,9 +185,5 @@ export const productReducer = createReducer(
     loading: false,
     error
   })),
-  // on(ProductActions.setSort, (state, { sort }) => ({
-  //   ...state,
-  //   sort,
-  //   page: 1 // Reset to first page when sort changes
-  // })),
+
 );

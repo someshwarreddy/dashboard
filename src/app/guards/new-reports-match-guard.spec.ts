@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { CanMatchFn } from '@angular/router';
+import { CanMatchFn, PartialMatchRouteSnapshot, Route, UrlSegment } from '@angular/router';
 
 import { newReportsMatchGuard } from './new-reports-match-guard';
 
@@ -16,9 +16,9 @@ describe('newReportsMatchGuard', () => {
   });
    it('1. should return true when new reports are enabled', () => {
     const result = newReportsMatchGuard(
-      {} as any,
-      [] as any,
-      {} as any
+      {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
     );
 
     expect(result).toBe(true);

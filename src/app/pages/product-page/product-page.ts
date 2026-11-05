@@ -1,18 +1,18 @@
 import { Component, inject, OnInit, computed } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { CreateProduct, Product } from '../../models/product';
+import {  Product } from '../../models/product';
 import * as ProductActions from '../../store/product.actions';
 import * as ProductSelectors from '../../store/product.selectors';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ProductCard } from '../../components/product-card/product-card';
+
 import { ProductList } from '../../components/product-list/product-list';
 import { ProductSearch } from '../../components/product-search/product-search';
-import { ProductDetails } from '../../components/product-details/product-details';
+
 import { ProductForm } from '../../components/product-form/product-form';
 import { ViewChild } from '@angular/core';
 import { Actions, ofType } from '@ngrx/effects';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Router, ActivatedRoute,  } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 @Component({
   selector: 'app-product-page',

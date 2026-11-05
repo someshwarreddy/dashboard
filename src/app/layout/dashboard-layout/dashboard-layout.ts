@@ -1,5 +1,5 @@
 
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import { Component, computed,  inject, signal } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../store/auth.selectors';
@@ -29,11 +29,7 @@ export class DashboardLayout {
     return name ? name.charAt(0).toUpperCase() : 'U';
   });
   constructor() {
-    effect(() => {
-      const navigation = this.router.currentNavigation();
-
-      // console.log('Current navigation:', navigation);
-    });
+  
  this.router.events
       .pipe(
         filter(event =>

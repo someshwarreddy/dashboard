@@ -1,6 +1,6 @@
 import { Component, inject, effect, output, ElementRef, ViewChild, input, signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { CreateProduct, Product } from '../../models/product';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Actions, ofType } from '@ngrx/effects';

@@ -20,23 +20,13 @@ export const authReducer = createReducer(
     error: null
   })),
 
-  // on(AuthActions.loginSuccess, state => ({
-
-  //   ...state,
-  //   isAuthenticated: true,
-  //   loading: false,
-  //   error: null
-  // })),
-  on(AuthActions.loginSuccess, (state, { token }) => {
-    // console.log('LOGIN SUCCESS REACHED REDUCER');
-    // console.log('TOKEN:', token);
+  on(AuthActions.loginSuccess, state => {
 
     return {
       ...state,
       isAuthenticated: true,
       loading: false,
       error: null,
-  
     };
   }),
 

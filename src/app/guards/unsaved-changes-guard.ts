@@ -6,9 +6,6 @@ export interface CanComponentDeactivate {
 
 export const unsavedChangesGuard: CanDeactivateFn<CanComponentDeactivate> = (
   component,
-  currentRoute,
-  currentState,
-  nextState,
 ) => {
       console.log('🔥🔥 UNSAVED CHANGES GUARD CALLED');
   console.log('Component:', component);

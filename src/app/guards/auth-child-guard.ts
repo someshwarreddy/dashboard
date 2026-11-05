@@ -1,6 +1,6 @@
 import { CanActivateChildFn } from '@angular/router';
 
-export const authChildGuard: CanActivateChildFn = (childRoute, state) => {
+export const authChildGuard: CanActivateChildFn = (childRoute) => {
 
    console.log('AUTH CHILD GUARD CALLED');
   console.log('Child route:', childRoute.routeConfig?.path);

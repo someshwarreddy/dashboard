@@ -1,7 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import { HttpHeaders, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
+import { HttpHeaders, HttpInterceptorFn, HttpRequest, HttpResponse } from '@angular/common/http';
 
 import { authInterceptor } from './auth-interceptor';
+import { of } from 'rxjs';
 
 describe('authInterceptor', () => {
   const interceptor: HttpInterceptorFn = (req, next) =>
@@ -27,7 +28,7 @@ describe('authInterceptor', () => {
       expect(req.headers.get('Authorization'))
         .toBe('Bearer test-token');
 
-      return undefined as any;
+      return of(new HttpResponse<unknown>());
     });
 
     authInterceptor(request, next);
@@ -45,7 +46,7 @@ describe('authInterceptor', () => {
 
   const next = vi.fn((req: HttpRequest<unknown>) => {
     expect(req.headers.has('Authorization')).toBe(false);
-    return undefined as any;
+    return of(new HttpResponse<unknown>());
   });
 
   authInterceptor(request, next);
@@ -64,7 +65,7 @@ it('3. should skip Authorization header for authentication endpoints', () => {
 
   const next = vi.fn((req: HttpRequest<unknown>) => {
     expect(req.headers.has('Authorization')).toBe(false);
-    return undefined as any;
+    return of(new HttpResponse<unknown>());
   });
 
   authInterceptor(request, next);
@@ -80,7 +81,10 @@ it('4. should not modify the original request', () => {
     '/api/products'
   );
 
- const next = vi.fn((req: HttpRequest<unknown>) => undefined as any);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const next = vi.fn(( req: HttpRequest<unknown>) => {
+  return of(new HttpResponse<unknown>());
+})
 
   authInterceptor(request, next);
 
@@ -108,7 +112,7 @@ it('5. should preserve existing headers when adding token', () => {
     expect(req.headers.get('X-Custom-Header'))
       .toBe('custom-value');
 
-    return undefined as any;
+    return of(new HttpResponse<unknown>());
   });
 
   authInterceptor(request, next);

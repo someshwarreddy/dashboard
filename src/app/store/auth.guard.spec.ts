@@ -1,9 +1,9 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree, provideRouter } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, UrlTree, provideRouter } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { authGuard } from './auth.guard';
 import * as AuthSelectors from '../store/auth.selectors';
-import { BehaviorSubject, firstValueFrom, Observable, timeout, TimeoutError } from 'rxjs';
+import {  firstValueFrom, Observable, timeout, TimeoutError } from 'rxjs';
 
 describe('authGuard', () => {
   let store: MockStore;
@@ -29,8 +29,8 @@ describe('authGuard', () => {
   const result = await firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean>
     )
   );
@@ -46,8 +46,8 @@ it('2. should redirect unauthenticated users to login', async () => {
   const result = await firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     )
   );
@@ -66,8 +66,8 @@ it('3. should wait until authentication is initialized', async () => {
   const resultPromise = firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     )
   );
@@ -90,8 +90,8 @@ it('4. should not check authentication before initialization completes', async (
   const resultPromise = firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     )
   );
@@ -118,8 +118,8 @@ it('5. should not emit a result if authentication is never initialized', async (
   const resultPromise = firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     ).pipe(
       timeout({ first: 100 })
@@ -139,8 +139,8 @@ it('6. should preserve the complete requested URL in returnUrl', async () => {
   const result = await firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: requestedUrl } as any
+        {} as ActivatedRouteSnapshot,
+        { url: requestedUrl } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     )
   );
@@ -162,8 +162,8 @@ it('7. should return a UrlTree without navigating directly', async () => {
   const result = await firstValueFrom(
     TestBed.runInInjectionContext(() =>
       authGuard(
-        {} as any,
-        { url: '/products' } as any
+        {} as ActivatedRouteSnapshot,
+        { url: '/products' } as unknown as RouterStateSnapshot
       ) as Observable<boolean | UrlTree>
     )
   );

@@ -52,29 +52,6 @@ private router = inject(Router);
   { dispatch: false }
 );
 
-// restoreAuth$ = createEffect(() =>
-//   this.actions$.pipe(
-//     ofType(AuthActions.restoreAuth),
-
-//     switchMap(() =>
-//       this.authService.getLoggedInUser().pipe(
-//         map(response =>
-//           AuthActions.restoreAuthSuccess({
-//             user: response.user
-//           })
-//         ),
-
-//         catchError(error =>
-//           of(
-//             AuthActions.restoreAuthFailure({
-//               error: error.error?.message ?? 'Session expired'
-//             })
-//           )
-//         )
-//       )
-//     )
-//   )
-// );
 restoreAuth$ = createEffect(() =>
   this.actions$.pipe(
     ofType(AuthActions.restoreAuth),

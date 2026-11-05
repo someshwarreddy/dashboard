@@ -1,6 +1,9 @@
 import { TestBed } from '@angular/core/testing';
 import { CanDeactivateFn } from '@angular/router';
-
+import {
+  ActivatedRouteSnapshot,
+  RouterStateSnapshot,
+} from '@angular/router';
 import {
   CanComponentDeactivate,
   unsavedChangesGuard,
@@ -23,12 +26,12 @@ describe('unsavedChangesGuard', () => {
     };
 
     const result = TestBed.runInInjectionContext(() =>
-      unsavedChangesGuard(
-        component as any,
-        {} as any,
-        {} as any,
-        {} as any
-      )
+     unsavedChangesGuard(
+  component,
+  {} as ActivatedRouteSnapshot,
+  {} as RouterStateSnapshot,
+  {} as RouterStateSnapshot
+)
     );
 
     expect(component.canDeactivate).toHaveBeenCalled();
@@ -41,10 +44,10 @@ describe('unsavedChangesGuard', () => {
 
   const result = TestBed.runInInjectionContext(() =>
     unsavedChangesGuard(
-      component as any,
-      {} as any,
-      {} as any,
-      {} as any
+      component,
+      {} as ActivatedRouteSnapshot,
+      {} as RouterStateSnapshot,
+      {} as RouterStateSnapshot
     )
   );
 
@@ -58,10 +61,10 @@ it('4. should preserve the Promise result when it resolves to true', async () =>
 
   const result = TestBed.runInInjectionContext(() =>
     unsavedChangesGuard(
-      component as any,
-      {} as any,
-      {} as any,
-      {} as any
+      component,
+      {} as ActivatedRouteSnapshot,
+      {} as RouterStateSnapshot,
+      {} as RouterStateSnapshot
     )
   );
 

@@ -4,6 +4,7 @@ import { ActivatedRoute, provideRouter, convertToParamMap, Router } from '@angul
 import { ProductPage } from './product-page';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Observable, of } from 'rxjs';
+import { Action } from '@ngrx/store';
 import { initialState } from '../../store/product.reducer';
 import * as ProductActions from '../../store/product.actions';
 import * as ProductSelectors from '../../store/product.selectors';
@@ -14,7 +15,7 @@ import { ProductList } from '../../components/product-list/product-list';
 describe('ProductPage', () => {
   let component: ProductPage;
   let fixture: ComponentFixture<ProductPage>;
-  let actions$: Observable<any>;
+  let actions$: Observable<Action>;
   let store: MockStore;
 
   beforeEach(async () => {
@@ -603,7 +604,7 @@ it('should call createProduct when the Create Product button is clicked', () => 
 
   expect(createButton).not.toBeNull();
 
-  createProductSpy.mockImplementation(() => {});
+  createProductSpy.mockImplementation(() => undefined);
 
   createButton?.click();
 
@@ -633,7 +634,7 @@ it('should call updateSearchUrl when the search component emits a search term', 
     By.directive(ProductSearch)
   );
 
-  searchDebugElement.triggerEventHandler('search', 'phone');
+  searchDebugElement.triggerEventHandler('searchChange', 'phone');
 
   expect(updateSearchSpy).toHaveBeenCalledWith('phone');
 });
@@ -641,7 +642,7 @@ it('should call updateSearchUrl when the search component emits a search term', 
 it('should call deleteProduct when the product list emits a product ID', () => {
   const deleteProductSpy = vi
     .spyOn(component, 'deleteProduct')
-    .mockImplementation(() => {});
+    .mockImplementation(() => undefined);
 
   fixture.detectChanges();
 

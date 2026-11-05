@@ -13,7 +13,7 @@
   </div>
   <section class="product-panel">
     <div class="product-toolbar">
-      <app-product-search (search)="updateSearchUrl($event)" />
+      <app-product-search (searchChange)="updateSearchUrl($event)" />
 
       <div class="sort-control">
         <label for="product-sort">Sort by</label>

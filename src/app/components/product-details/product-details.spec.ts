@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ProductDetails } from './product-details';
 import { Product } from '../../models/product';
 import { provideMockStore } from '@ngrx/store/testing';
-import { provideRouter, ActivatedRoute, convertToParamMap  } from '@angular/router';
+import { provideRouter,    } from '@angular/router';
 describe('ProductDetails', () => {
   let component: ProductDetails;
   let fixture: ComponentFixture<ProductDetails>;

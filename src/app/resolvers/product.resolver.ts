@@ -6,7 +6,7 @@ import {
 } from '@angular/router';
 import { Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { filter, map, of, switchMap, take } from 'rxjs';
+import {  map, of, switchMap, take } from 'rxjs';
 
 import { Product } from '../models/product';
 import * as ProductActions from '../store/product.actions';
@@ -20,19 +20,7 @@ export const productResolver: ResolveFn<Product> = (route) => {
 
     console.log('🔥 PRODUCT RESOLVER CALLED', id);
     return store.select(ProductSelectors.selectProductDetails).pipe(
-        //     take(1),
-        //     switchMap(product => {
-        //         if (product?.id === id) {
-        //             return of(product);
-        //         }
-
-        //         store.dispatch(ProductActions.loadProduct({ id }));
-
-        //         return store.select(ProductSelectors.selectProductDetails).pipe(
-        //             filter((product): product is Product => product?.id === id),
-        //             take(1)
-        //         );
-        //     })
+       
         take(1),
 
         switchMap(product => {

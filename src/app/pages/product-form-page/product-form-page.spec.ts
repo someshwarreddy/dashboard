@@ -14,9 +14,8 @@ import { ActivatedRoute, convertToParamMap ,provideRouter, ParamMap,} from '@ang
 describe('ProductFormPage', () => {
   let component: ProductFormPage;
   let fixture: ComponentFixture<ProductFormPage>;
-  let actions$: Observable<Action>;
+const actions$: Observable<Action> = of();
   let paramMap$: BehaviorSubject<ParamMap>;
-  actions$ = of();
 
   beforeEach(async () => {
     paramMap$ = new BehaviorSubject(
@@ -177,7 +176,7 @@ it('should delegate canDeactivate to ProductForm', () => {
 
   component.productFormComponent = {
     canDeactivate: canDeactivateSpy
-  } as any;
+  } as unknown as typeof component.productFormComponent;
 
   const result = component.canDeactivate();
 
@@ -189,7 +188,7 @@ it('should return false when ProductForm prevents navigation', () => {
 
   component.productFormComponent = {
     canDeactivate: canDeactivateSpy
-  } as any;
+  } as unknown as typeof component.productFormComponent;
 
   const result = component.canDeactivate();
 
@@ -201,7 +200,7 @@ it('should prevent browser unload when form is dirty', () => {
     productForm: {
       dirty: true
     }
-  } as any;
+  } as unknown as typeof component.productFormComponent;
 
   const event = {
     preventDefault: vi.fn(),
@@ -218,7 +217,7 @@ it('should not prevent browser unload when form is clean', () => {
     productForm: {
       dirty: false
     }
-  } as any;
+  } as unknown as typeof component.productFormComponent;
 
   const event = {
     preventDefault: vi.fn(),
@@ -231,7 +230,7 @@ it('should not prevent browser unload when form is clean', () => {
   expect(event.returnValue).toBeUndefined();
 });
 it('should not throw when ProductForm is not initialized', () => {
-  component.productFormComponent = undefined as any;
+  component.productFormComponent = undefined as unknown as typeof component.productFormComponent;
 
   const event = {
     preventDefault: vi.fn(),

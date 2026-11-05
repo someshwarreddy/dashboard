@@ -1,12 +1,10 @@
 import { inject, Service } from '@angular/core';
-import { map, Observable, of, throwError } from 'rxjs';
-import { CreateProduct, Product, ProductApiResponse, ProductApi, ProductListResponse } from '../models/product';
+import { map, Observable } from 'rxjs';
+import { CreateProduct, Product, ProductApiResponse, ProductApi,  } from '../models/product';
 import { HttpClient } from '@angular/common/http';
 @Service()
 export class ProductService {
-
   private http = inject(HttpClient);
-
 
   getProducts(
     page: number,

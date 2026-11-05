@@ -1,6 +1,5 @@
-import { Component, inject, input, OnInit, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { Product } from '../../models/product';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-product-details',
@@ -12,6 +11,4 @@ export class ProductDetails  {
   product = input.required<Product>();
   clear = output<void>();
   edit = output<Product>();
-
-
 }

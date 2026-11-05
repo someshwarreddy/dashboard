@@ -7,5 +7,5 @@ import { Component, output } from '@angular/core';
   styleUrl: './product-search.scss',
 })
 export class ProductSearch {
-  search = output<string>();
+  searchChange = output<string>();
 }

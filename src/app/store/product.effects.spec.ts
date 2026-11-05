@@ -451,45 +451,294 @@ describe('ProductEffects', () => {
             })
         );
     });
-  it('should ignore identical consecutive search actions', async () => {
-  vi.useFakeTimers();
+    it('should ignore identical consecutive search actions', async () => {
+        vi.useFakeTimers();
 
-  try {
-    const product = {
-      id: 1,
-      title: 'Test Phone',
-      price: 500,
-      image: 'phone.jpg'
-    };
+        try {
+            const product = {
+                id: 1,
+                title: 'Test Phone',
+                price: 500,
+                image: 'phone.jpg'
+            };
 
-    productServiceMock.searchProducts.mockReturnValue(
-      of({ products: [product], total: 1 })
-    );
+            productServiceMock.searchProducts.mockReturnValue(
+                of({ products: [product], total: 1 })
+            );
 
-    const searchAction = ProductActions.searchProducts({
-      query: 'phone',
-      page: 1,
-      limit: 10,
-      sort: ''
+            const searchAction = ProductActions.searchProducts({
+                query: 'phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            });
+
+            actions$ = new Subject();
+
+            const resultPromise = firstValueFrom(effects.searchProducts$);
+
+            // Emit the first action and let it pass debounceTime.
+            (actions$ as Subject<unknown>).next(searchAction);
+            await vi.advanceTimersByTimeAsync(500);
+
+            // Emit the identical action and let it pass debounceTime.
+            (actions$ as Subject<unknown>).next(searchAction);
+            await vi.advanceTimersByTimeAsync(500);
+
+            await resultPromise;
+
+            expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(1);
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+    it('should ignore duplicate search actions', async () => {
+        vi.useFakeTimers();
+
+        const searchAction = ProductActions.searchProducts({
+            query: 'Test',
+            page: 1,
+            limit: 10,
+            sort: ''
+        });
+
+        actions$ = of(searchAction, searchAction);
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const emittedPromise = new Promise<void>(resolve => {
+            effects.searchProducts$.subscribe({
+                next: () => resolve()
+            });
+        });
+
+        await vi.advanceTimersByTimeAsync(500);
+        await emittedPromise;
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(1);
+
+        vi.useRealTimers();
+    });
+    it('should search again when query changes', async () => {
+        vi.useFakeTimers();
+
+        actions$ = of(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            }),
+            ProductActions.searchProducts({
+                query: 'Laptop',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const emittedPromise = new Promise<void>(resolve => {
+            effects.searchProducts$.subscribe({
+                next: () => resolve()
+            });
+        });
+
+        await vi.advanceTimersByTimeAsync(500);
+        await emittedPromise;
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(1);
+        expect(productServiceMock.searchProducts).toHaveBeenCalledWith(
+            'Laptop', 1, 10, ''
+        );
+
+        vi.useRealTimers();
+    });
+    it('should process a new search query after debounce', async () => {
+        vi.useFakeTimers();
+
+        const actionsSubject = new Subject();
+
+        actions$ = actionsSubject;
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const emittedActions: unknown[] = [];
+
+        const subscription = effects.searchProducts$.subscribe(action => {
+            emittedActions.push(action);
+        });
+
+        await vi.advanceTimersByTimeAsync(500);
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 2,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(2);
+
+        subscription.unsubscribe();
+        actionsSubject.complete();
+        vi.useRealTimers();
+    });
+    it('should process a new search query after debounce', async () => {
+        vi.useFakeTimers();
+
+        const actionsSubject = new Subject();
+
+        actions$ = actionsSubject;
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const emittedActions: unknown[] = [];
+
+        const subscription = effects.searchProducts$.subscribe(action => {
+            emittedActions.push(action);
+        });
+
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Laptop',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(2);
+
+        subscription.unsubscribe();
+        actionsSubject.complete();
+        vi.useRealTimers();
+    });
+    it('should search again when limit changes', async () => {
+        vi.useFakeTimers();
+
+        const actionsSubject = new Subject();
+        actions$ = actionsSubject;
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const subscription = effects.searchProducts$.subscribe();
+
+        // First search: limit 10
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        // Second search: only limit changes to 20
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 20,
+                sort: ''
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(2);
+
+        expect(productServiceMock.searchProducts).toHaveBeenLastCalledWith(
+            'Phone', 1, 20, ''
+        );
+
+        subscription.unsubscribe();
+        actionsSubject.complete();
+
+        vi.useRealTimers();
+    });
+    it('should search again when sort changes', async () => {
+        vi.useFakeTimers();
+
+        const actionsSubject = new Subject();
+        actions$ = actionsSubject;
+
+        productServiceMock.searchProducts.mockReturnValue(
+            of({ products: [], total: 0 })
+        );
+
+        const subscription = effects.searchProducts$.subscribe();
+  
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: ''
+            })
+        );
+        await vi.advanceTimersByTimeAsync(500);
+        actionsSubject.next(
+            ProductActions.searchProducts({
+                query: 'Phone',
+                page: 1,
+                limit: 10,
+                sort: 'price-asc'
+            })
+        );
+
+        await vi.advanceTimersByTimeAsync(500);
+
+        expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(2);
+
+          expect(productServiceMock.searchProducts).toHaveBeenLastCalledWith(
+            'Phone', 1, 10, 'price-asc'
+          );
+
+        subscription.unsubscribe();
+        actionsSubject.complete();
+
+        vi.useRealTimers();
     });
 
-    actions$ = new Subject();
-
-    const resultPromise = firstValueFrom(effects.searchProducts$);
-
-    // Emit the first action and let it pass debounceTime.
-    (actions$ as Subject<unknown>).next(searchAction);
-    await vi.advanceTimersByTimeAsync(500);
-
-    // Emit the identical action and let it pass debounceTime.
-    (actions$ as Subject<unknown>).next(searchAction);
-    await vi.advanceTimersByTimeAsync(500);
-
-    await resultPromise;
-
-    expect(productServiceMock.searchProducts).toHaveBeenCalledTimes(1);
-  } finally {
-    vi.useRealTimers();
-  }
-});
 });

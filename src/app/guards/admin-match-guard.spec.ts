@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Router, UrlTree, provideRouter } from '@angular/router';
+import { PartialMatchRouteSnapshot, Route, Router, UrlSegment, UrlTree, provideRouter } from '@angular/router';
 import { provideMockStore, MockStore } from '@ngrx/store/testing';
 import { firstValueFrom, isObservable, Observable, timeout, TimeoutError } from 'rxjs';
 
@@ -8,6 +8,8 @@ import {
   selectAuthInitialized,
   selectUser
 } from '../store/auth.selectors';
+import { User } from '../models/product';
+
 
 describe('adminMatchGuard', () => {
   let store: MockStore;
@@ -29,20 +31,22 @@ describe('adminMatchGuard', () => {
     store.overrideSelector(selectAuthInitialized, true);
 
     store.overrideSelector(selectUser, {
+      _id: '1',
       id: 1,
       name: 'Admin User',
+      email: 'admin@example.com',
       role: 'admin'
-    } as any);
+    } as User);
 
     store.refreshState();
 
     const result = await firstValueFrom(
       TestBed.runInInjectionContext(() =>
         adminMatchGuard(
-          {} as any,
-          [] as any,
-          {} as any
-        ) as any
+           {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
+        ) as Observable<boolean | UrlTree>
       )
     );
 
@@ -52,18 +56,20 @@ describe('adminMatchGuard', () => {
     store.overrideSelector(selectAuthInitialized, true);
 
     store.overrideSelector(selectUser, {
+      _id: '2',
       id: 2,
       name: 'Normal User',
+      email: 'user@example.com',
       role: 'user'
-    } as any);
+    } as User);
 
     store.refreshState();
 
     const guardResult = TestBed.runInInjectionContext(() =>
       adminMatchGuard(
-        {} as any,
-        [] as any,
-        {} as any
+        {} as Route,
+        [] as UrlSegment[],
+        {} as PartialMatchRouteSnapshot
       )
     );
 
@@ -82,9 +88,9 @@ describe('adminMatchGuard', () => {
 
   const guardResult = TestBed.runInInjectionContext(() =>
     adminMatchGuard(
-      {} as any,
-      [] as any,
-      {} as any
+      {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
     ) 
   );
 
@@ -101,18 +107,20 @@ it('4. should wait until authentication is initialized', async () => {
   store.overrideSelector(selectAuthInitialized, false);
 
   store.overrideSelector(selectUser, {
+    _id: '1',
     id: 1,
     name: 'Admin User',
+    email: 'admin@example.com',
     role: 'admin'
-  } as any);
+  } as User);
 
   store.refreshState();
 
   const guardResult = TestBed.runInInjectionContext(() =>
     adminMatchGuard(
-      {} as any,
-      [] as any,
-      {} as any
+      {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
     ) as Observable<boolean | UrlTree>
   );
 
@@ -134,9 +142,9 @@ it('5. should not emit a result if authentication is never initialized', async (
 
   const guardResult = TestBed.runInInjectionContext(() =>
     adminMatchGuard(
-      {} as any,
-      [] as any,
-      {} as any
+      {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
     )
   );
 
@@ -152,18 +160,20 @@ it('6. should not redirect an admin user', async () => {
   store.overrideSelector(selectAuthInitialized, true);
 
   store.overrideSelector(selectUser, {
-    id: 1,
+    _id: '1',
+   
     name: 'Admin User',
+    email: 'admin@example.com',
     role: 'admin'
-  } as any);
+  } as User);
 
   store.refreshState();
 
   const guardResult = TestBed.runInInjectionContext(() =>
     adminMatchGuard(
-      {} as any,
-      [] as any,
-      {} as any
+      {} as Route,
+      [] as UrlSegment[],
+      {} as PartialMatchRouteSnapshot
     )
   );
 

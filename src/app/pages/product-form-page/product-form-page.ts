@@ -22,7 +22,11 @@ productFormComponent!: ProductForm;
     this.route.paramMap.pipe(
       map(params => {
         const id = params.get('id');
-        return id ? Number(id) : null;
+const numericId = Number(id);
+
+return id && Number.isInteger(numericId) && numericId > 0
+  ? numericId
+  : null;
       })
     ),
     { initialValue: null }
