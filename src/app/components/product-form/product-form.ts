@@ -21,7 +21,7 @@ export class ProductForm {
   private fb = inject(FormBuilder);
   product = input<Product | null>(null);
   imageError = '';
-  private isSaving = signal(false);
+  isSaving = signal(false);
   showUnsavedDialog = signal(false);
   private actions$ = inject(Actions);
   private router = inject(Router);
@@ -40,7 +40,7 @@ export class ProductForm {
       } else {
         this.productForm.reset({
           title: '',
-          price: 0
+          price: null
         });
 
         this.imageFile = null;
@@ -49,7 +49,7 @@ export class ProductForm {
 
 
     });
-
+    // Success
     this.actions$
       .pipe(
         ofType(
@@ -59,29 +59,33 @@ export class ProductForm {
         takeUntilDestroyed()
       )
       .subscribe(() => {
-        // this.isSaving.set(false);
         this.router.navigate(['/products']);
+      });
+
+    // Failure
+    this.actions$
+      .pipe(
+        ofType(
+          ProductActions.createProductFailure,
+          ProductActions.updateProductFailure
+        ),
+        takeUntilDestroyed()
+      )
+      .subscribe(() => {
+        this.isSaving.set(false);
       });
 
   }
   productForm = this.fb.group({
-    title: [
-      '',
-      [
-        ProductValidators.titleRequired,
-        ProductValidators.titleMinLength,
-        // ProductValidators.titleMaxLength,
-        ProductValidators.titleNoWhitespace
-      ],
-    ],
-    price: [
-      0,
-      [
-        ProductValidators.priceRequired,
-        ProductValidators.priceMin,
-
-      ],
-    ],
+    title: this.fb.control<string | null>('', [
+      ProductValidators.titleRequired,
+      ProductValidators.titleMinLength,
+      ProductValidators.titleNoWhitespace
+    ]),
+    price: this.fb.control<number | null>(null, [
+      ProductValidators.priceRequired,
+      ProductValidators.priceMin
+    ])
   });
 
   @ViewChild('fileInput')
@@ -101,6 +105,7 @@ export class ProductForm {
 
     if (this.productForm.invalid) {
       this.productForm.markAllAsTouched();
+      //   
       return;
     }
     if (!this.imageFile && !this.product()) {
@@ -114,19 +119,30 @@ export class ProductForm {
       image: this.imageFile!
     };
     this.isSaving.set(true);
-    // this.create.emit(product);
     this.save.emit(product);
   }
-  reset() {
 
-    this.productForm.reset();
+  reset() {
+    const product = this.product();
+
+    if (product) {
+      // Edit mode: restore original product values
+      this.productForm.reset({
+        title: product.title,
+        price: product.price
+      });
+
+      this.imagePreview = product.image;
+    } else {
+      // Create mode: clear the form
+      this.productForm.reset();
+      this.imagePreview = null;
+    }
+
     this.imageFile = null;
-    this.imagePreview = null;
     this.imageError = '';
     this.fileInput.nativeElement.value = '';
-
   }
-
 
   onStay() {
     this.showUnsavedDialog.set(false);

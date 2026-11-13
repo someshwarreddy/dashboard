@@ -1,1 +1,58 @@
-<p>users-page works!</p>
+<h2>Users Management</h2>
+
+<p>Loading: {{ loading() }}</p>
+
+<p>Search: {{ search() }}</p>
+
+<p>Current Page: {{ page() }}</p>
+
+<p>Current count: {{ count() }}</p>
+
+<p>Total Users: {{ total() }}</p>
+
+<h3>Signal Set Example</h3>
+
+<p>Count: {{ count() }}</p>
+
+<button (click)="changeCount()">
+  Change Count
+</button>
+
+<p>Final Price: {{ finalPrice() }}</p>
+<h3>Selected Users: {{ selectedCount() }}</h3>
+
+<button (click)="selectUser()">Select User</button>
+
+<button (click)="removeUser()">Remove User</button>
+
+<h2>Count: {{ count() }}</h2>
+
+<button (click)="increment()">Increment</button>
+
+<button (click)="decrement()">Decrement</button>
+<h2>Users</h2>
+
+<!-- @for (user of users(); track user.id) {
+  <p>{{ user.name }} - {{ user.role }}</p>
+} -->
+
+<button (click)="addUser()">Add User</button>
+
+<button
+  [disabled]="loading()"
+  (click)="loadUsers()"
+>
+  Load Users
+</button>
+
+@if (loading()) {
+  <p>Loading users...</p>
+} @else {
+  @for (user of users(); track user.id) {
+    <div>
+      {{ user.name }} - {{ user.role }}
+    </div>
+  } @empty {
+    <p>No users available.</p>
+  }
+}

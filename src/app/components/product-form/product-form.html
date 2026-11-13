@@ -58,12 +58,15 @@
     <img [src]="imagePreview" alt="Product preview" />
     }
 
-    <button type="submit">
-        Save Product
-    </button>
+    <button type="submit" [disabled]="isSaving()">
+  Save Product
+</button>
     <button type="button" (click)="addTitleMaxLengthValidator()">
         Enable 50-character limit
     </button>
+    <button type="button" (click)="reset()">
+  Reset
+</button>
 </form>
 @if (showUnsavedDialog()) {
 <app-unsaved-changes-dialog (stay)="onStay()" (leave)="onLeave()" />

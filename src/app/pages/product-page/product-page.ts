@@ -157,6 +157,7 @@ export class ProductPage implements OnInit {
   }
   createProduct() {
     this.router.navigate(['/products/new']);
+    
   }
   pages = computed(() =>
     Array.from(
