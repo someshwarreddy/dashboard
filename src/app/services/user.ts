@@ -9,8 +9,7 @@ import {
 
 @Service()
 export class User {
-     private http = inject(HttpClient);
-
+  private readonly http = inject(HttpClient);
   private readonly apiUrl = 'https://dummyjson.com/users';
 
   getUsers(
@@ -18,19 +17,19 @@ export class User {
     limit: number,
     search: string
   ): Observable<UsersApiResponse> {
-
     const skip = (page - 1) * limit;
+    const query = search.trim();
 
     let params = new HttpParams()
       .set('limit', limit)
       .set('skip', skip);
 
-    const url = search.trim()
+    const url = query
       ? `${this.apiUrl}/search`
       : this.apiUrl;
 
-    if (search.trim()) {
-      params = params.set('q', search.trim());
+    if (query) {
+      params = params.set('q', query);
     }
 
     return this.http.get<UsersApiResponse>(url, { params });

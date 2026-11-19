@@ -1,36 +1,92 @@
 <div class="users-container">
-  <h2 class="users-title">Users Management</h2>
+  <div class="users-header">
+  <div class="users-heading">
+    <h2 class="users-title">Users Management</h2>
 
-  <p class="users-total">
-    Total Users: <span class="badge">{{ userState.totalUsers() }}</span>
-  </p>
+    <p class="users-total">
+      Total Users:
+      <span class="badge">{{ userState.totalUsers() }}</span>
+    </p>
+  </div>
 
+  <a
+    routerLink="/admin/user-registration"
+    class="btn-register"
+  >
+    <span>+</span>
+    User Registration
+  </a>
+</div>
+
+<div class="users-toolbar">
+  <div class="search-box">
+   <input
+  type="search"
+  placeholder="Search users..."
+  #searchInput
+  (input)="userState.setSearch(searchInput.value)"
+/>
+    <span class="search-icon">⌕</span>
+  </div>
+</div>
+  @if (userState.loading()) {
+  <p>Loading users...</p>
+  }
+
+  @if (userState.error(); as error) {
+  <p class="error-message">{{ error }}</p>
+  }
+
+  @if (!userState.loading() && !userState.error()) {
   <div class="users-list">
     @for (user of userState.users(); track user.id) {
     <div class="user-card">
       <div class="user-info">
-        <span class="user-name">{{ user.id}}</span>
-        <span class="user-name">{{ user.name }}</span>
-        <span class="user-role">{{ user.role }}</span>
-      </div>
+        <img [src]="user.image" [alt]="user.firstName" width="50" height="50" />
 
-      <button class="btn btn-danger" (click)="userState.deleteUser(user.id)">
-        Delete
-      </button>
+        <span class="user-name">
+          {{ user.firstName }} {{ user.lastName }}
+        </span>
+
+        <span class="user-role">{{ user.role }}</span>
+
+        <span>{{ user.email }}</span>
+
+        <span>{{ user.company.name }}</span>
+      </div>
     </div>
+    } @empty {
+    <p>No users found.</p>
     }
   </div>
+  }
 
-  <button class="btn btn-primary" (click)="addUser()">Add User</button>
-  <div #box>
-    {{ message() }}
+  @if (userState.totalPages() > 1) {
+  <div class="pagination">
+
+    <button class="page-btn" [disabled]="userState.page() === 1 || userState.loading()"
+      (click)="userState.setPage(userState.page() - 1)">
+      Previous
+    </button>
+
+    @for (item of userState.paginationPages(); track $index) {
+    @if (item === '...') {
+    <span class="page-dots">...</span>
+    } @else {
+    <button class="page-number" [class.active]="item === userState.page()" [disabled]="userState.loading()"
+      (click)="userState.setPage(item)">
+      {{ item }}
+    </button>
+    }
+    }
+
+    <button class="page-btn" [disabled]="userState.page() === userState.totalPages() || userState.loading()"
+      (click)="userState.setPage(userState.page() + 1)">
+      Next
+    </button>
+
   </div>
+  }
 
-  <button (click)="message.set('Welcome to Angular Signals')">
-    Change Message
-  </button>
-  <a routerLink="/admin/user-registration" routerLinkActive="active">
-  
-    <span>User Registration</span>
-  </a>
+
 </div>
