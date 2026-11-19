@@ -20,5 +20,11 @@ export const ADMIN_ROUTES: Routes = [
     loadComponent: () =>
       import('../pages/old-reports-page/old-reports-page')
         .then(m => m.OldReportsPage)
-  }
+  },
+  {
+  path: 'user-registration',
+  loadComponent: () =>
+    import('../pages/user-registration/user-registration')
+      .then(m => m.UserRegistration)
+}
 ];

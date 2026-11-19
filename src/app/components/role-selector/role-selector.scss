@@ -1,0 +1,27 @@
+.role-selector {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  button {
+    padding: 10px 20px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: #eab308;
+    }
+
+    &.active {
+      background: #eab308;
+      border-color: #eab308;
+      color: #111827;
+      font-weight: 600;
+    }
+  }
+}

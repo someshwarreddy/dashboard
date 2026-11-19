@@ -1,0 +1,11 @@
+<div class="role-selector" (focusout)="touch.emit()">
+  @for (role of roles; track role) {
+    <button
+      type="button"
+      [class.active]="value() === role"
+      (click)="selectRole(role)"
+    >
+      {{ role }}
+    </button>
+  }
+</div>

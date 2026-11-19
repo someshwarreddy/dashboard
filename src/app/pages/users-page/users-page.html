@@ -7,19 +7,30 @@
 
   <div class="users-list">
     @for (user of userState.users(); track user.id) {
-      <div class="user-card">
-        <div class="user-info">
-           <span class="user-name">{{ user.id}}</span>
-          <span class="user-name">{{ user.name }}</span>
-          <span class="user-role">{{ user.role }}</span>
-        </div>
-
-        <button class="btn btn-danger" (click)="userState.deleteUser(user.id)">
-          Delete
-        </button>
+    <div class="user-card">
+      <div class="user-info">
+        <span class="user-name">{{ user.id}}</span>
+        <span class="user-name">{{ user.name }}</span>
+        <span class="user-role">{{ user.role }}</span>
       </div>
+
+      <button class="btn btn-danger" (click)="userState.deleteUser(user.id)">
+        Delete
+      </button>
+    </div>
     }
   </div>
 
   <button class="btn btn-primary" (click)="addUser()">Add User</button>
+  <div #box>
+    {{ message() }}
+  </div>
+
+  <button (click)="message.set('Welcome to Angular Signals')">
+    Change Message
+  </button>
+  <a routerLink="/admin/user-registration" routerLinkActive="active">
+  
+    <span>User Registration</span>
+  </a>
 </div>
