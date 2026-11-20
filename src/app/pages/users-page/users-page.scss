@@ -383,8 +383,113 @@
   }
 }
 
+
 @media (max-width: 480px) {
   .search-box {
     max-width: none;
+  }
+}
+.page-info {
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 600;
+}
+.search-box {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+
+  input {
+    width: 100%;
+    height: 42px;
+    padding: 0 42px 0 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    color: #1e293b;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 12%);
+    }
+
+    &::placeholder {
+      color: #94a3b8;
+    }
+  }
+
+  .search-icon {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    font-size: 23px;
+    pointer-events: none;
+  }
+
+  .clear-search {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: #64748b;
+    font-size: 22px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+    }
+  }
+}
+.search-box {
+  input[type='search'] {
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-decoration,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+      -webkit-appearance: none;
+      appearance: none;
+      display: none;
+    }
+  }
+}
+.btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-height: 36px;
+  padding: 0.5rem 1rem;
+  border: 1px solid #334155;
+  border-radius: 6px;
+  background: #334155;
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease,
+              border-color 0.2s ease;
+
+  &:hover {
+    background: #1e293b;
+    border-color: #1e293b;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #64748b;
+    outline-offset: 2px;
   }
 }

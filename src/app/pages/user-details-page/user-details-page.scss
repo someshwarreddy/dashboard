@@ -1,0 +1,136 @@
+
+.user-details-page {
+  padding: 1.5rem;
+  color: #1e293b;
+
+  h2 {
+    margin: 1.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+}
+
+.btn-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #fff;
+  color: #334155;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f1f5f9;
+    border-color: #94a3b8;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #64748b;
+    outline-offset: 2px;
+  }
+}
+
+.user-details-card {
+  max-width: 850px;
+  padding: 2rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgb(15 23 42 / 5%);
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+
+  img {
+    width: 90px;
+    height: 90px;
+    border: 3px solid #e2e8f0;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+
+  h3 {
+    margin: 0 0 0.4rem;
+    color: #0f172a;
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.9rem;
+    text-transform: capitalize;
+  }
+}
+
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+  padding-top: 1.75rem;
+
+  > div {
+    min-width: 0;
+  }
+
+  strong {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: #64748b;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  p {
+    margin: 0;
+    color: #1e293b;
+    font-size: 0.95rem;
+    overflow-wrap: anywhere;
+  }
+}
+
+.error-message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid #fecaca;
+  border-radius: 6px;
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+@media (max-width: 600px) {
+  .user-details-page {
+    padding: 1rem;
+  }
+
+  .user-details-card {
+    padding: 1.25rem;
+  }
+
+  .profile-header {
+    align-items: flex-start;
+
+    img {
+      width: 70px;
+      height: 70px;
+    }
+  }
+
+  .details-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+}

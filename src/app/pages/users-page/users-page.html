@@ -1,34 +1,35 @@
 <div class="users-container">
   <div class="users-header">
-  <div class="users-heading">
-    <h2 class="users-title">Users Management</h2>
+    <div class="users-heading">
+      <h2 class="users-title">Users Management</h2>
 
-    <p class="users-total">
-      Total Users:
-      <span class="badge">{{ userState.totalUsers() }}</span>
-    </p>
+      <p class="users-total">
+        Total Users:
+        <span class="badge">{{ userState.totalUsers() }}</span>
+      </p>
+    </div>
+
+    <a routerLink="/admin/user-registration" class="btn-register">
+      <span>+</span>
+      User Registration
+    </a>
   </div>
 
-  <a
-    routerLink="/admin/user-registration"
-    class="btn-register"
-  >
-    <span>+</span>
-    User Registration
-  </a>
-</div>
+  <div class="users-toolbar">
+    <div class="search-box">
+      <input type="search" placeholder="Search users..." #searchInput
+        (input)="userState.setSearch(searchInput.value)" />
 
-<div class="users-toolbar">
-  <div class="search-box">
-   <input
-  type="search"
-  placeholder="Search users..."
-  #searchInput
-  (input)="userState.setSearch(searchInput.value)"
-/>
-    <span class="search-icon">⌕</span>
+      @if (searchInput.value) {
+      <button type="button" class="clear-search" title="Clear search"
+        (click)="searchInput.value = ''; userState.setSearch('')">
+        &times;
+      </button>
+      } @else {
+      <span class="search-icon">⌕</span>
+      }
+    </div>
   </div>
-</div>
   @if (userState.loading()) {
   <p>Loading users...</p>
   }
@@ -53,7 +54,11 @@
         <span>{{ user.email }}</span>
 
         <span>{{ user.company.name }}</span>
+        <button type="button" class="btn-view" (click)="viewUser(user.id)">
+          View Details
+        </button>
       </div>
+
     </div>
     } @empty {
     <p>No users found.</p>
@@ -61,9 +66,10 @@
   </div>
   }
 
-  @if (userState.totalPages() > 1) {
+  @if (userState.users().length > 0) {
   <div class="pagination">
 
+    @if (userState.totalPages() > 1) {
     <button class="page-btn" [disabled]="userState.page() === 1 || userState.loading()"
       (click)="userState.setPage(userState.page() - 1)">
       Previous
@@ -84,6 +90,9 @@
       (click)="userState.setPage(userState.page() + 1)">
       Next
     </button>
+    } @else {
+    <span class="page-info">Page 1 of 1</span>
+    }
 
   </div>
   }

@@ -1,9 +1,10 @@
 
 import { Service, signal, computed, inject } from '@angular/core';
-import { debounceTime, distinctUntilChanged, finalize, Subject } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, EMPTY, finalize, Subject, switchMap, tap } from 'rxjs';
 
 import { User as UserService } from './user';
 import { ManagedUser } from '../models/managed-user';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Service()
 export class Userstate {
@@ -15,9 +16,12 @@ export class Userstate {
   private readonly _error = signal<string | null>(null);
   private readonly _search = signal('');
   private readonly _page = signal(1);
-  private readonly _limit = signal(10);
+  private readonly _limit = signal(12);
   private readonly _total = signal(0);
-
+  private readonly _selectedUser = signal<ManagedUser | null>(null);
+  private readonly _userDetailsLoading = signal(false);
+  private readonly _userDetailsError = signal<string | null>(null);
+  private readonly selectedUserId$ = new Subject<number>();
   // Public read-only state
   users = this._users.asReadonly();
   loading = this._loading.asReadonly();
@@ -63,16 +67,49 @@ export class Userstate {
 
     return pages;
   });
- constructor() {
-  this.searchSubject.pipe(
-    debounceTime(500),
-    distinctUntilChanged()
-  ).subscribe(search => {
-    this._page.set(1);       // Reset page first
-    this._search.set(search);
-    this.loadUsers();
-  });
-}
+  selectedUser = this._selectedUser.asReadonly();
+  userDetailsLoading = this._userDetailsLoading.asReadonly();
+  userDetailsError = this._userDetailsError.asReadonly();
+  constructor() {
+    this.searchSubject.pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+    ).subscribe(search => {
+      this._page.set(1);       // Reset page first
+      this._search.set(search);
+      this.loadUsers();
+    });
+  this.selectedUserId$
+    .pipe(
+      switchMap(id => {
+        // Runs after the previous request is cancelled.
+        this._selectedUser.set(null);
+        this._userDetailsError.set(null);
+        this._userDetailsLoading.set(true);
+
+        return this.userService.getUserById(id).pipe(
+          tap(user => {
+            this._selectedUser.set(user);
+          }),
+
+          catchError(() => {
+            this._userDetailsError.set(
+              'Failed to load user details.'
+            );
+
+            return EMPTY;
+          }),
+
+          finalize(() => {
+             this._userDetailsLoading.set(false);
+          })
+        );
+      }),
+
+      takeUntilDestroyed()
+    )
+    .subscribe();
+  }
   // Load users from API
   loadUsers(): void {
     this._loading.set(true);
@@ -100,9 +137,9 @@ export class Userstate {
   }
 
   // Update search
-setSearch(value: string): void {
-  this.searchSubject.next(value.trim());
-}
+  setSearch(value: string): void {
+    this.searchSubject.next(value.trim());
+  }
 
   // Update page
   setPage(page: number): void {
@@ -113,5 +150,7 @@ setSearch(value: string): void {
     this._page.set(page);
     this.loadUsers();
   }
-
+loadUserById(id: number): void {
+  this.selectedUserId$.next(id);
+}
 }

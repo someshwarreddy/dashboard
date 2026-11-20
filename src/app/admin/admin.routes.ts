@@ -9,6 +9,12 @@ export const ADMIN_ROUTES: Routes = [
         .then(m => m.UsersPage)
   },
   {
+    path: 'users/:id',
+    loadComponent: () =>
+      import('../pages/user-details-page/user-details-page')
+        .then(m => m.UserDetailsPage)
+  },
+  {
     path: 'reports',
     canMatch: [newReportsMatchGuard],
     loadComponent: () =>
@@ -22,9 +28,9 @@ export const ADMIN_ROUTES: Routes = [
         .then(m => m.OldReportsPage)
   },
   {
-  path: 'user-registration',
-  loadComponent: () =>
-    import('../pages/user-registration/user-registration')
-      .then(m => m.UserRegistration)
-}
+    path: 'user-registration',
+    loadComponent: () =>
+      import('../pages/user-registration/user-registration')
+        .then(m => m.UserRegistration)
+  }
 ];
