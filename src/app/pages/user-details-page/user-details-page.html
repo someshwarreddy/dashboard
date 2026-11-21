@@ -12,10 +12,10 @@
   } @else if (userState.selectedUser(); as user) {
     <div class="user-details-card">
       <div class="profile-header">
-        <img [src]="user.image" [alt]="user.firstName" />
+        <img [src]="user.image" [alt]="user.name" />
 
         <div>
-          <h3>{{ user.firstName }} {{ user.lastName }}</h3>
+          <h3>{{ user.name }} </h3>
           <p>{{ user.role }}</p>
         </div>
       </div>

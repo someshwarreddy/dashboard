@@ -1,14 +1,14 @@
 export interface ManagedUser {
-  id: number;
-  firstName: string;
-  lastName: string;
+  _id: string;
+  name: string;
   email: string;
   phone: string;
-  age: number;
+  age?: number;
   gender: string;
   image: string;
   username: string;
-  role: string;
+  role: 'admin' | 'user';
+  status: 'pending' | 'active';
   company: {
     name: string;
     title: string;

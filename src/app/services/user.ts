@@ -10,7 +10,7 @@ import {
 @Service()
 export class User {
   private readonly http = inject(HttpClient);
-  private readonly apiUrl = 'https://dummyjson.com/users';
+  private readonly apiUrl = 'http://localhost:5000/api/users';
 
   getUsers(
     page: number,

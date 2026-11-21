@@ -11,91 +11,115 @@
 
     <a routerLink="/admin/user-registration" class="btn-register">
       <span>+</span>
-      User Registration
+      Create User
     </a>
   </div>
 
   <div class="users-toolbar">
     <div class="search-box">
-      <input type="search" placeholder="Search users..." #searchInput
-        (input)="userState.setSearch(searchInput.value)" />
+      <input
+        type="search"
+        placeholder="Search users..."
+        #searchInput
+        (input)="userState.setSearch(searchInput.value)"
+      />
 
       @if (searchInput.value) {
-      <button type="button" class="clear-search" title="Clear search"
-        (click)="searchInput.value = ''; userState.setSearch('')">
-        &times;
-      </button>
+        <button
+          type="button"
+          class="clear-search"
+          title="Clear search"
+          (click)="searchInput.value = ''; userState.setSearch('')"
+        >
+          &times;
+        </button>
       } @else {
-      <span class="search-icon">⌕</span>
+        <span class="search-icon">⌕</span>
       }
     </div>
   </div>
+
   @if (userState.loading()) {
-  <p>Loading users...</p>
+    <p>Loading users...</p>
   }
 
   @if (userState.error(); as error) {
-  <p class="error-message">{{ error }}</p>
+    <p class="error-message">{{ error }}</p>
   }
 
   @if (!userState.loading() && !userState.error()) {
-  <div class="users-list">
-    @for (user of userState.users(); track user.id) {
-    <div class="user-card">
-      <div class="user-info">
-        <img [src]="user.image" [alt]="user.firstName" width="50" height="50" />
+    <div class="users-list">
+      @for (user of userState.users(); track user._id) {
+        <div class="user-card">
+          <div class="user-info">
+            <img
+              [src]="user.image"
+              [alt]="user.name"
+              width="50"
+              height="50"
+            />
 
-        <span class="user-name">
-          {{ user.firstName }} {{ user.lastName }}
-        </span>
+            <span class="user-name">
+              {{ user.name }}
+            </span>
 
-        <span class="user-role">{{ user.role }}</span>
+            <span class="user-role">{{ user.role }}</span>
 
-        <span>{{ user.email }}</span>
+            <span>{{ user.email }}</span>
 
-        <span>{{ user.company.name }}</span>
-        <button type="button" class="btn-view" (click)="viewUser(user.id)">
-          View Details
-        </button>
-      </div>
+            <span>{{ user.company.name }}</span>
 
+            <button
+              type="button"
+              class="btn-view"
+              (click)="viewUser(user._id)"
+            >
+              View Details
+            </button>
+          </div>
+        </div>
+      } @empty {
+        <p>No users found.</p>
+      }
     </div>
-    } @empty {
-    <p>No users found.</p>
-    }
-  </div>
   }
 
   @if (userState.users().length > 0) {
-  <div class="pagination">
+    <div class="pagination">
+      @if (userState.totalPages() > 1) {
+        <button
+          class="page-btn"
+          [disabled]="userState.page() === 1 || userState.loading()"
+          (click)="userState.setPage(userState.page() - 1)"
+        >
+          Previous
+        </button>
 
-    @if (userState.totalPages() > 1) {
-    <button class="page-btn" [disabled]="userState.page() === 1 || userState.loading()"
-      (click)="userState.setPage(userState.page() - 1)">
-      Previous
-    </button>
+        @for (item of userState.paginationPages(); track $index) {
+          @if (item === '...') {
+            <span class="page-dots">...</span>
+          } @else {
+            <button
+              class="page-number"
+              [class.active]="item === userState.page()"
+              [disabled]="userState.loading()"
+              (click)="userState.setPage(item)"
+            >
+              {{ item }}
+            </button>
+          }
+        }
 
-    @for (item of userState.paginationPages(); track $index) {
-    @if (item === '...') {
-    <span class="page-dots">...</span>
-    } @else {
-    <button class="page-number" [class.active]="item === userState.page()" [disabled]="userState.loading()"
-      (click)="userState.setPage(item)">
-      {{ item }}
-    </button>
-    }
-    }
-
-    <button class="page-btn" [disabled]="userState.page() === userState.totalPages() || userState.loading()"
-      (click)="userState.setPage(userState.page() + 1)">
-      Next
-    </button>
-    } @else {
-    <span class="page-info">Page 1 of 1</span>
-    }
-
-  </div>
+        <button
+          class="page-btn"
+          [disabled]="userState.page() === userState.totalPages() || userState.loading()"
+          (click)="userState.setPage(userState.page() + 1)"
+        >
+          Next
+        </button>
+      } @else {
+        <span class="page-info">Page 1 of 1</span>
+      }
+    </div>
   }
-
-
 </div>

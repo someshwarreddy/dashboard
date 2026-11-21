@@ -27,7 +27,7 @@ private readonly router = inject(Router);
     this.userState.loadUsers();
   }
 
-viewUser(id: number): void {
+viewUser(id: string): void {
   this.router.navigate(['/admin/users', id]);
 }
 }

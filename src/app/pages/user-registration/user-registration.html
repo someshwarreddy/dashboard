@@ -1,5 +1,5 @@
 <div class="registration-container">
-  <h2>User Registration</h2>
+  <h2>User Creation</h2>
   <form [formRoot]="userForm">
     <div class="form-group">
       <label for="name">Full Name</label>
@@ -26,48 +26,36 @@
       }
     </div>
 
-  <div class="form-group">
-  <label for="email">Email Address</label>
+    <div class="form-group">
+      <label for="email">Email Address</label>
 
-  <input
-    id="email"
-    type="email"
-    placeholder="Enter your email"
-    [formField]="userForm.email"
-  />
+      <input id="email" type="email" placeholder="Enter your email" [formField]="userForm.email" />
 
-  @if (userForm.email().touched()) {
-  @switch (true) {
-    @case (userForm.email().pending()) {
+      @if (userForm.email().touched()) {
+      @if (userForm.email().pending()) {
       <small>Checking email availability...</small>
-    }
-
-    @case (userForm.email().invalid()) {
+      } @else if (userForm.email().invalid()) {
       @for (error of userForm.email().errors(); track error.kind) {
-        <small class="error">{{ error.message }}</small>
+      <small class="error">{{ error.message }}</small>
       }
-    }
-
-    @case (userForm.email().valid()) {
+      } @else if (userForm.email().valid()) {
       <small class="success">Email is valid</small>
-    }
-  }
-}
-</div>
+      }
+      }
+    </div>
 
     <div class="form-group">
       <label for="age">Age</label>
       <input id="age" type="number" [formField]="userForm.age" />
-      @if(userForm.age().invalid() && (userForm.age().touched() )) {
-      <small class="error">Age must be between 18 and 60</small>
+      @if (userForm.age().invalid() && userForm.age().touched()) {
+      <small class="error">Age must be between 18 and 60.</small>
       }
     </div>
 
     <div class="form-group">
       <label for="role">Role</label>
-     <app-role-selector [formField]="userForm.role" />
-      @if ( userForm().touched() &&
-      userForm().errors().length > 0) {
+      <app-role-selector [formField]="userForm.role" />
+      @if (userForm().touched()) {
       @for (error of userForm().errors(); track error.kind) {
       @if (error.kind === 'roleAgeMismatch') {
       <small class="error">{{ error.message }}</small>
@@ -75,24 +63,9 @@
       }
       }
     </div>
-    <button type="submit">
-      Register User
+    <button type="submit" [disabled]="userForm().invalid() || userForm().pending()" class="register">
+      Create User
     </button>
   </form>
-  <hr />
 
-  <h3>Live Form Data</h3>
-
-  <p>Name: {{ userModel().name }}</p>
-  <p>Email: {{ userModel().email }}</p>
-  <p>Age: {{ userModel().age }}</p>
-  <p>Role: {{ userModel().role }}</p>
-  <h4>Name Field State</h4>
-
-  <p>Value: {{ userForm.name().value() }}</p>
-  <p>Touched: {{ userForm.name().touched() }}</p>
-  <p>Dirty: {{ userForm.name().dirty() }}</p>
-  <p>Valid: {{ userForm.name().valid() }}</p>
-  <p>Invalid: {{ userForm.name().invalid() }}</p>
-  <p>Disabled: {{ userForm.name().disabled() }}</p>
 </div>

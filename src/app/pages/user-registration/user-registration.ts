@@ -11,10 +11,6 @@ interface UserFormModel {
   age: number;
   role: string;
 }
-// interface CheckEmailResponse {
-//   exists: boolean;
-// }
-
 
 @Component({
   selector: 'app-user-registration',
@@ -23,16 +19,16 @@ interface UserFormModel {
   styleUrl: './user-registration.scss'
 })
 export class UserRegistration {
-  private authService = inject(AuthService);
-  private createEmailResource =
-    createEmailAvailabilityResource(this.authService);
-  userModel = signal<UserFormModel>({
+
+  private readonly  createEmailResource =
+   createEmailAvailabilityResource(inject(AuthService));
+ readonly  userModel = signal<UserFormModel>({
     name: '',
     email: '',
     age: 18,
     role: 'User'
   });
-  userSchema = schema<UserFormModel>((path) => {
+ readonly  userSchema = schema<UserFormModel>((path) => {
     debounce(path.name, 'blur');
     debounce(path.email, 'blur');
     required(path.name);
@@ -87,15 +83,17 @@ export class UserRegistration {
     });
 
   });
-  userForm = form(this.userModel, this.userSchema, {
+ readonly  userForm = form(this.userModel, this.userSchema, {
     submission: {
-      action: async (field) => {
-        console.log('Submitted data:', field().value());
-      },
-      onInvalid: (field) => {
-        console.log('Form is invalid');
-        console.log('Errors:', field().errorSummary());
-      }
-    }
+  action: async (field) => {
+    const user = field().value();
+
+    // Temporary: verify the submitted form data.
+    console.log(user);
+  },
+  onInvalid: () => {
+    // Form validation prevents invalid submission.
+  }
+}
   });
 }
