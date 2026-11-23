@@ -3,7 +3,7 @@ import { Service, signal, computed, inject } from '@angular/core';
 import { catchError, debounceTime, distinctUntilChanged, EMPTY, finalize, Subject, switchMap, tap } from 'rxjs';
 
 import { User as UserService } from './user';
-import { ManagedUser } from '../models/managed-user';
+import { ManagedUser, UserDetailsResponse } from '../models/managed-user';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Service()
@@ -18,10 +18,10 @@ export class Userstate {
   private readonly _page = signal(1);
   private readonly _limit = signal(12);
   private readonly _total = signal(0);
-  private readonly _selectedUser = signal<ManagedUser | null>(null);
+  private readonly _selectedUser = signal<UserDetailsResponse | null>(null);
   private readonly _userDetailsLoading = signal(false);
   private readonly _userDetailsError = signal<string | null>(null);
-  private readonly selectedUserId$ = new Subject<number>();
+  private readonly selectedUserId$ = new Subject<string>();
   // Public read-only state
   users = this._users.asReadonly();
   loading = this._loading.asReadonly();
@@ -150,7 +150,7 @@ export class Userstate {
     this._page.set(page);
     this.loadUsers();
   }
-loadUserById(id: number): void {
+loadUserById(id: string): void {
   this.selectedUserId$.next(id);
 }
 }

@@ -5,7 +5,7 @@ export interface ManagedUser {
   phone: string;
   age?: number;
   gender: string;
-  image: string;
+ image?: string;
   username: string;
   role: 'admin' | 'user';
   status: 'pending' | 'active';
@@ -20,4 +20,7 @@ export interface UsersApiResponse {
   total: number;
   skip: number;
   limit: number;
+}
+export interface UserDetailsResponse {
+  user: ManagedUser;
 }

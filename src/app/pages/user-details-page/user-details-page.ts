@@ -22,14 +22,14 @@ export class UserDetailsPage implements OnInit {
   readonly userState = inject(Userstate);
   private readonly destroyRef = inject(DestroyRef);
   ngOnInit(): void {
-  this.route.paramMap
-    .pipe(takeUntilDestroyed(this.destroyRef))
-    .subscribe(params => {
-      const id = Number(params.get('id'));
+ this.route.paramMap
+  .pipe(takeUntilDestroyed(this.destroyRef))
+  .subscribe(params => {
+    const id = params.get('id');
 
-      if (id > 0) {
-        this.userState.loadUserById(id);
-      }
-    });
+    if (id) {
+      this.userState.loadUserById(id);
+    }
+  });
 }
 }

@@ -9,53 +9,60 @@
     <p>Loading user details...</p>
   } @else if (userState.userDetailsError(); as error) {
     <p class="error-message">{{ error }}</p>
-  } @else if (userState.selectedUser(); as user) {
-    <div class="user-details-card">
-      <div class="profile-header">
-        <img [src]="user.image" [alt]="user.name" />
+  }@else if (userState.selectedUser(); as response) {
+  @let user = response.user;
 
-        <div>
-          <h3>{{ user.name }} </h3>
-          <p>{{ user.role }}</p>
-        </div>
-      </div>
+  <div class="user-details-card">
+    <div class="profile-header">
+      <img [src]="user.image" [alt]="user.name" />
 
-      <div class="details-grid">
-        <div>
-          <strong>Email</strong>
-          <p>{{ user.email }}</p>
-        </div>
-
-        <div>
-          <strong>Phone</strong>
-          <p>{{ user.phone }}</p>
-        </div>
-
-        <div>
-          <strong>Age</strong>
-          <p>{{ user.age }}</p>
-        </div>
-
-        <div>
-          <strong>Gender</strong>
-          <p>{{ user.gender }}</p>
-        </div>
-
-        <div>
-          <strong>Username</strong>
-          <p>{{ user.username }}</p>
-        </div>
-
-        <div>
-          <strong>Company</strong>
-          <p>{{ user.company.name }}</p>
-        </div>
-
-        <div>
-          <strong>Job Title</strong>
-          <p>{{ user.company.title }}</p>
-        </div>
+      <div>
+        <h3>{{ user.name }}</h3>
+        <p>{{ user.role }}</p>
       </div>
     </div>
-  }
+
+    <div class="details-grid">
+      <div>
+        <strong>Email</strong>
+        <p>{{ user.email }}</p>
+      </div>
+
+      <div>
+        <strong>Phone</strong>
+        <p>{{ user.phone }}</p>
+      </div>
+
+      <div>
+        <strong>Age</strong>
+        <p>{{ user.age ?? 'N/A' }}</p>
+      </div>
+
+      <div>
+        <strong>Gender</strong>
+        <p>{{ user.gender || 'N/A' }}</p>
+      </div>
+
+      <div>
+        <strong>Username</strong>
+        <p>{{ user.username || 'N/A' }}</p>
+      </div>
+
+      <div>
+        <strong>Company</strong>
+        <p>{{ user.company.name || 'N/A' }}</p>
+      </div>
+
+      <div>
+        <strong>Job Title</strong>
+        <p>{{ user.company.title || 'N/A' }}</p>
+      </div>
+
+      <div>
+        <strong>Status</strong>
+        <p>{{ user.status }}</p>
+      </div>
+    </div>
+  </div>
+}
 </div>

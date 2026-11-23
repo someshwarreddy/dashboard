@@ -6,7 +6,7 @@
             <span>Enterprise</span>
         </div>
 
-       
+
 
         <div class="nav-section">
             <p class="nav-heading">MAIN MENU</p>
@@ -59,7 +59,13 @@
                 <div class="profile-menu" appClickOutside (appClickOutside)="closeProfileMenu()">
                     <button type="button" class="profile-trigger" (click)="toggleProfileMenu()"
                         [attr.aria-expanded]="profileMenuOpen()" aria-label="Toggle profile menu">
-                        <div class="avatar">{{ userInitial() }}</div>
+                        <div class="avatar">
+                            @if (profileImageUrl() && !imageFailed()) {
+                            <img [src]="profileImageUrl()" alt="Profile picture" (error)="onImageError()" />
+                            } @else {
+                            {{ userInitial() }}
+                            }
+                        </div>
 
                         <div class="profile-info">
                             <strong>{{ userName() }}</strong>
@@ -79,7 +85,22 @@
                         </div>
 
                         <div class="dropdown-divider"></div>
+                        <label class="dropdown-item upload-item">
+                            <span>📷</span>
 
+                            @if (uploading()) {
+                            Uploading...
+                            } @else {
+                            Change profile picture
+                            }
+
+                            <input type="file" accept="image/jpeg,image/png,image/webp"
+                                (change)="onProfileImageSelected($event)" [disabled]="uploading()" hidden />
+                        </label>
+
+                        @if (uploadError()) {
+                        <p class="upload-error">{{ uploadError() }}</p>
+                        }
                         <button type="button" class="dropdown-item logout-item" (click)="logout()">
                             <span>↪</span>
                             Logout

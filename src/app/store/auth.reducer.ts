@@ -83,4 +83,10 @@ on(AuthActions.loadCurrentUserFailure, (state, { error }) => ({
   ...state,
   error
 })),
+on(AuthActions.updateUserImage, (state, { image }) => ({
+  ...state,
+  user: state.user
+    ? { ...state.user, image }
+    : null
+})),
 );

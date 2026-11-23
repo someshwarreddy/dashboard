@@ -76,3 +76,7 @@ export const loadCurrentUserFailure = createAction(
   '[Auth] Load Current User Failure',
   props<{ error: string }>()
 );
+export const updateUserImage = createAction(
+  '[Auth] Update User Profile Image',
+  props<{ image: string }>()
+);

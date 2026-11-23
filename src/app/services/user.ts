@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import {
-  ManagedUser,
+  UserDetailsResponse,
   UsersApiResponse
 } from '../models/managed-user';
 
@@ -17,25 +17,31 @@ export class User {
     limit: number,
     search: string
   ): Observable<UsersApiResponse> {
-    const skip = (page - 1) * limit;
-    const query = search.trim();
+     const params = new HttpParams()
+    .set('page', page)
+    .set('limit', limit)
+    .set('search', search.trim());
 
-    let params = new HttpParams()
-      .set('limit', limit)
-      .set('skip', skip);
+    return this.http.get<UsersApiResponse>(
+    `${this.apiUrl}/users-all`,
+    { params }
+  );
 
-    const url = query
-      ? `${this.apiUrl}/search`
-      : this.apiUrl;
-
-    if (query) {
-      params = params.set('q', query);
-    }
-
-    return this.http.get<UsersApiResponse>(url, { params });
   }
 
-  getUserById(id: number): Observable<ManagedUser> {
-    return this.http.get<ManagedUser>(`${this.apiUrl}/${id}`);
-  }
+getUserById(id: string): Observable<UserDetailsResponse> {
+  return this.http.get<UserDetailsResponse>(
+    `${this.apiUrl}/${id}`
+  );
+}
+uploadProfileImage(file: File): Observable<UserDetailsResponse> {
+  const formData = new FormData();
+
+  formData.append('image', file);
+
+  return this.http.post<UserDetailsResponse>(
+    `${this.apiUrl}/upload-profile-image`,
+    formData
+  );
+}
 }

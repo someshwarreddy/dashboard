@@ -1,5 +1,5 @@
 
-import { Component, computed,  inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationError, NavigationStart, Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../../store/auth.selectors';
@@ -7,6 +7,8 @@ import { logout } from '../../store/auth.actions';
 import { ClickOutside } from '../../shared/click-outside';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
+import { User } from '../../services/user';
+import { updateUserImage } from '../../store/auth.actions';
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
@@ -15,9 +17,14 @@ import { filter } from 'rxjs';
   styleUrl: './dashboard-layout.scss'
 })
 export class DashboardLayout {
+  uploading = signal(false);
+  uploadError = signal('');
+  private userService = inject(User);
   private store = inject(Store);
   private router = inject(Router);
   user = this.store.selectSignal(selectUser);
+  imageFailed = signal(false);
+
 
   userName = computed(() => this.user()?.name ?? 'User');
 
@@ -28,9 +35,16 @@ export class DashboardLayout {
     const name = this.userName().trim();
     return name ? name.charAt(0).toUpperCase() : 'U';
   });
+  profileImageUrl = computed(() => {
+    const image = this.user()?.image;
+
+    return image
+      ? `http://localhost:5000${image}`
+      : null;
+  });
   constructor() {
-  
- this.router.events
+
+    this.router.events
       .pipe(
         filter(event =>
           event instanceof NavigationStart ||
@@ -43,7 +57,7 @@ export class DashboardLayout {
       .subscribe(event => {
         console.log('ROUTER EVENT:', event);
       });
-   
+
   }
   logout(): void {
     this.store.dispatch(logout());
@@ -56,5 +70,52 @@ export class DashboardLayout {
   closeProfileMenu(): void {
     this.profileMenuOpen.set(false);
   }
+  onImageError(): void {
+    this.imageFailed.set(true);
+  }
+  onProfileImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
 
+    if (!file) return;
+
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedTypes.includes(file.type)) {
+      this.uploadError.set('Only JPEG, PNG and WebP images are allowed');
+      input.value = '';
+      return;
+    }
+
+    if (file.size > 2 * 1024 * 1024) {
+      this.uploadError.set('Image size must not exceed 2 MB');
+      input.value = '';
+      return;
+    }
+
+    this.uploadError.set('');
+    this.uploading.set(true);
+
+    this.userService.uploadProfileImage(file).subscribe({
+      next: response => {
+        const image = response.user.image;
+
+        if (image) {
+          this.store.dispatch(updateUserImage({ image }));
+          this.imageFailed.set(false);
+        }
+
+        this.uploading.set(false);
+        input.value = '';
+      },
+      error: err => {
+        this.uploadError.set(
+          err.error?.message ?? 'Profile image upload failed'
+        );
+
+        this.uploading.set(false);
+        input.value = '';
+      }
+    });
+  }
 }

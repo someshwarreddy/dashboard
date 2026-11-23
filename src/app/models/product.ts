@@ -61,6 +61,7 @@ export interface User {
   name: string;
   email: string;
   role: 'admin' | 'user';
+   image?: string;
 }
 
 export const initialAuthState: AuthState = {
