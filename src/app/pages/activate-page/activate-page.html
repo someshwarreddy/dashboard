@@ -1,0 +1,48 @@
+<div class="activate-container">
+    <h2>Activate Your Account</h2>
+    <p>Create a password to activate your account.</p>
+<form [formGroup]="activateForm" (ngSubmit)="onSubmit()">
+        <div>
+            <label for="password">Password</label>
+            <input id="password" type="password" formControlName="password" />
+
+            @if (activateForm.controls.password.touched &&
+            activateForm.controls.password.hasError('required')) {
+            <small>Password is required.</small>
+            }
+
+            @if (activateForm.controls.password.touched &&
+            activateForm.controls.password.hasError('minlength')) {
+            <small>Password must contain at least 8 characters.</small>
+            }
+        </div>
+
+        <div>
+            <label for="confirmPassword">Confirm Password</label>
+            <input id="confirmPassword" type="password" formControlName="confirmPassword" />
+            @if (
+            activateForm.controls.confirmPassword.touched &&
+            activateForm.hasError('passwordMismatch')
+            ) {
+            <small>Passwords do not match.</small>
+            }
+            @if (activateForm.controls.confirmPassword.touched &&
+            activateForm.controls.confirmPassword.hasError('required')) {
+            <small>Please confirm your password.</small>
+            }
+        </div>
+@if (errorMessage()) {
+  <small>{{ errorMessage() }}</small>
+}
+
+@if (successMessage()) {
+  <p>{{ successMessage() }}</p>
+}
+        <button
+  type="submit"
+  [disabled]="activateForm.invalid || submitting()"
+>
+  {{ submitting() ? 'Activating...' : 'Activate Account' }}
+</button>
+    </form>
+</div>

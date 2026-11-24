@@ -3,12 +3,16 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import {
+  CreateUserRequest,
+  CreateUserResponse,
+  ResendActivationResponse,
   UserDetailsResponse,
   UsersApiResponse
 } from '../models/managed-user';
 
 @Service()
 export class User {
+
   private readonly http = inject(HttpClient);
   private readonly apiUrl = 'http://localhost:5000/api/users';
 
@@ -42,6 +46,18 @@ uploadProfileImage(file: File): Observable<UserDetailsResponse> {
   return this.http.post<UserDetailsResponse>(
     `${this.apiUrl}/upload-profile-image`,
     formData
+  );
+}
+createUser(user: CreateUserRequest): Observable<CreateUserResponse> {
+  return this.http.post<CreateUserResponse>(
+    this.apiUrl,
+    user
+  );
+}
+resendActivation(userId: string): Observable<ResendActivationResponse> {
+  return this.http.post<ResendActivationResponse>(
+    `${this.apiUrl}/${userId}/resend-activation`,
+    {}
   );
 }
 }

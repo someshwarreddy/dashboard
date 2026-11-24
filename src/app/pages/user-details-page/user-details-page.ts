@@ -3,7 +3,8 @@ import {
   ChangeDetectionStrategy,
   inject,
   OnInit,
-  DestroyRef
+  DestroyRef,
+  signal
 } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -21,6 +22,7 @@ export class UserDetailsPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   readonly userState = inject(Userstate);
   private readonly destroyRef = inject(DestroyRef);
+  imageFailed = signal(false);
   ngOnInit(): void {
  this.route.paramMap
   .pipe(takeUntilDestroyed(this.destroyRef))
@@ -31,5 +33,12 @@ export class UserDetailsPage implements OnInit {
       this.userState.loadUserById(id);
     }
   });
+}
+getInitials(name: string): string {
+  return name
+    .trim()
+    .split(/\s+/)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('');
 }
 }

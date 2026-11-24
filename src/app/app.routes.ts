@@ -16,95 +16,8 @@ import { NotificationSidebar } from './components/notification-sidebar/notificat
 import { DashboardLayout } from './layout/dashboard-layout/dashboard-layout';
 import { OrdersPage } from './features/orders/orders-page/orders-page';
 import { UnauthorizedPage } from './pages/unauthorized-page/unauthorized-page';
-// export const routes: Routes = [
-//   {
-//     path: '',
-//     redirectTo: 'products',
-//     pathMatch: 'full'
-//   },
-//   {
-//     path: 'login',
-//     component: LoginPage
-//   },
-//   {
-//     path: 'register',
-//     component: RegisterPage
-//   },
-//   {
-//     path: 'products',
-//     component: ProductPage,
-//     canActivate: [authGuard],
-//     data: {
-//       title: 'Products',
-//       section: 'Product Management'
-//     }
-//   },
-//   {
-//     path: 'products/new',
-//     component: ProductFormPage,
-//     canActivate: [authGuard],
-//     canDeactivate: [unsavedChangesGuard]
-//   },
-//   {
-//     path: 'products/:id/edit',
-//     component: ProductFormPage,
-//     canActivate: [authGuard],
-//     canDeactivate: [unsavedChangesGuard]
-//   },
-//   {
-//     path: 'products/:id',
-//     component: ProductDetailsPage,
-//     canActivate: [authGuard],
-//     canActivateChild: [authChildGuard],
-//     resolve: {
-//       product: productResolver
-//     },
-//     data: {
-//       title: 'Product Details'
-//     },
-//     children: [
-//       {
-//         path: 'reviews',
-//         component: ProductReviews
-//       },
-//       {
-//         path: 'specifications',
-//         component: ProductSpecifications
-//       }
-//     ],
+import { ActivatePage } from './pages/activate-page/activate-page';
 
-//   },
-//   // {
-//   //   path: 'admin',
-//   //   canMatch: [adminMatchGuard],
-//   //     canActivate: [authGuard],
-//   //   loadChildren: () =>
-//   //     import('./admin/admin.routes')
-//   //       .then(m => m.ADMIN_ROUTES)
-//   // },
-//   {
-//     path: 'admin',
-//     canActivate: [authGuard],
-//     children: [
-//       {
-//         path: '',
-//         canMatch: [adminMatchGuard],
-//         loadChildren: () =>
-//           import('./admin/admin.routes')
-//             .then(m => m.ADMIN_ROUTES)
-//       }
-//     ]
-//   },
-//   {
-//     path: 'notifications',
-//     component: NotificationSidebar,
-//     outlet: 'sidebar'
-//   },
-//   {
-//     path: '**',
-//     component: NotFoundPage
-//   }
-// ];
 export const routes: Routes = [
   {
     path: '',
@@ -121,7 +34,10 @@ export const routes: Routes = [
     path: 'register',
     component: RegisterPage
   },
-
+  {
+    path: 'activate',
+    component: ActivatePage
+  },
   // Shared dashboard shell.
   {
     path: '',

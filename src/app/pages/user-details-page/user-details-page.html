@@ -6,15 +6,28 @@
   <h2>User Details</h2>
 
   @if (userState.userDetailsLoading()) {
-    <p>Loading user details...</p>
+  <p>Loading user details...</p>
   } @else if (userState.userDetailsError(); as error) {
-    <p class="error-message">{{ error }}</p>
+  <p class="error-message">{{ error }}</p>
   }@else if (userState.selectedUser(); as response) {
   @let user = response.user;
 
   <div class="user-details-card">
     <div class="profile-header">
-      <img [src]="user.image" [alt]="user.name" />
+     <div class="user-avatar">
+  @if (user.image) {
+    <img
+      [src]="'http://localhost:5000' + user.image"
+      [alt]="user.name"
+      (error)="imageFailed.set(true)"
+      [hidden]="imageFailed()"
+    />
+  }
+
+  @if (!user.image || imageFailed()) {
+    <span>{{ getInitials(user.name) }}</span>
+  }
+</div>
 
       <div>
         <h3>{{ user.name }}</h3>
@@ -64,5 +77,5 @@
       </div>
     </div>
   </div>
-}
+  }
 </div>

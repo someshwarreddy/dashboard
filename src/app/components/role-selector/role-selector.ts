@@ -8,10 +8,10 @@ import { FormValueControl } from '@angular/forms/signals';
   styleUrl: './role-selector.scss',
 })
 export class RoleSelector implements FormValueControl<string> {
-  value = model<string>('User');
- touch = output<void>();
+  value = model<string>('user');
+  touch = output<void>();
 
-  roles = ['User', 'Admin', 'Manager'];
+  roles = ['user', 'admin'];
 
   selectRole(role: string) {
     this.value.set(role);

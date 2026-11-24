@@ -2,7 +2,13 @@
   <div class="users-header">
     <div class="users-heading">
       <h2 class="users-title">Users Management</h2>
+      @if (successMessage()) {
+      <p class="success-message">{{ successMessage() }}</p>
+      }
 
+      @if (resendError()) {
+      <p class="error-message">{{ resendError() }}</p>
+      }
       <p class="users-total">
         Total Users:
         <span class="badge">{{ userState.totalUsers() }}</span>
@@ -45,12 +51,9 @@
     <div class="user-card">
       <div class="user-info">
         <div class="user-avatar">
-          @if (user.image) {
-          <img [src]="'http://localhost:5000/' + user.image" [alt]="user.name" (error)="onImageError()"
-            [hidden]="imageFailed()" />
-          }
-
-          @if (!user.image || imageFailed()) {
+          @if (user.image && !imageFailed().has(user._id)) {
+          <img [src]="'http://localhost:5000' + user.image" [alt]="user.name" (error)="onImageError(user._id)" />
+          } @else {
           <span>{{ getInitials(user.name) }}</span>
           }
         </div>
@@ -65,9 +68,27 @@
 
         <span>{{ user.company.name }}</span>
 
-        <button type="button" class="btn-view" (click)="viewUser(user._id)">
-          View Details
-        </button>
+        <div class="user-actions">
+          <button type="button" class="btn-view" (click)="viewUser(user._id)">
+            View Details
+          </button>
+
+          @if (user.status === 'pending') {
+          <button type="button" class="btn-resend" [disabled]="
+    resendingId() === user._id ||
+    activationSentIds().has(user._id)
+  " (click)="resendActivation(user._id)">
+            {{
+            resendingId() === user._id
+            ? 'Sending...'
+            : activationSentIds().has(user._id)
+            ? 'Activation Email Sent'
+            : 'Resend Activation'
+            }}
+          </button>
+          }
+        </div>
+
       </div>
     </div>
     } @empty {

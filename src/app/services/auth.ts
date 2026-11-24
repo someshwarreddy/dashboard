@@ -10,43 +10,55 @@ interface CheckEmailResponse {
 interface LoginResponse {
   token: string;
 }
+interface ActivateAccountResponse {
+  message: string;
+}
 @Service()
 export class AuthService {
-     private http = inject(HttpClient);
-
+  private http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:5000/api';
   checkEmail(email: string): Observable<CheckEmailResponse> {
-
-    const params = new HttpParams()
-      .set('email', email);
+    const params = new HttpParams().set('email', email);
 
     return this.http.get<CheckEmailResponse>(
-      'http://localhost:5000/api/auth/checkmail',
+      `${this.apiUrl}/auth/checkmail`,
       { params }
     );
   }
-  
+
   register(user: {
-  name: string;
-  email: string;
+    name: string;
+    email: string;
+    password: string;
+  }) {
+    return this.http.post(
+      `${this.apiUrl}/auth/register`,
+      user
+    );
+  }
+
+  login(credentials: {
+    email: string;
+    password: string;
+  }) {
+    return this.http.post<LoginResponse>(
+      `${this.apiUrl}/auth/login`,
+      credentials
+    );
+  }
+
+  getLoggedInUser() {
+    return this.http.get<{ user: User }>(
+      `${this.apiUrl}/users/loggedin-user`
+    );
+  }
+  activateAccount(data: {
+  token: string;
   password: string;
-}) {
-  return this.http.post(
-    'http://localhost:5000/api/auth/register',
-    user
-  );
-}
-login(credentials: {
-  email: string;
-  password: string;
-}) {
-  return this.http.post<LoginResponse>(
-    'http://localhost:5000/api/auth/login',
-    credentials
-  );
-}
-getLoggedInUser() {
-  return this.http.get<{ user: User }>(
-    'http://localhost:5000/api/users/loggedin-user'
+}): Observable<ActivateAccountResponse> {
+  return this.http.post<ActivateAccountResponse>(
+    `${this.apiUrl}/auth/activate`,
+    data
   );
 }
 }
