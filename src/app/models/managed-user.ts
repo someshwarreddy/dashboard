@@ -60,3 +60,5 @@ export interface ResendActivationResponse {
   };
   emailSent: boolean;
 }
+
+

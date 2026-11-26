@@ -1,5 +1,5 @@
 import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/core';
-import { provideRouter,withComponentInputBinding } from '@angular/router';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideStore } from '@ngrx/store';
 import { routes, } from './app.routes';
 import { productReducer } from './store/product.reducer';
@@ -14,8 +14,8 @@ import { OrderEffects } from './store/order.effects';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
-  provideRouter(routes, withComponentInputBinding()),
-    provideStore({ product: productReducer, auth: authReducer,  orders: orderReducer }),
+    provideRouter(routes, withComponentInputBinding()),
+    provideStore({ product: productReducer, auth: authReducer, orders: orderReducer }),
     provideHttpClient(
       withInterceptors([authInterceptor])
     ),

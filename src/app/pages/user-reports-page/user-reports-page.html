@@ -1,0 +1,86 @@
+<section class="reports-container">
+    <h2>User Reports</h2>
+    <p class="reports-subtitle">Overview of registered users</p>
+
+    @if (reportState.loading()) {
+    <p>Loading reports...</p>
+    }
+
+    @if (reportState.error(); as error) {
+    <p class="error-message">{{ error }}</p>
+    }
+
+    @if (reportState.userReport(); as report) {
+    <div class="summary-grid">
+        <article class="summary-card">
+            <h3>Total Users</h3>
+            <p>{{ report.totalUsers }}</p>
+        </article>
+
+        <article class="summary-card">
+            <h3>Active Users</h3>
+            <p>{{ report.activeUsers }}</p>
+        </article>
+
+        <article class="summary-card">
+            <h3>Pending Users</h3>
+            <p>{{ report.pendingUsers }}</p>
+        </article>
+
+        <article class="summary-card">
+            <h3>Legacy Users</h3>
+            <p>{{ report.legacyUsers }}</p>
+        </article>
+    </div>
+
+    <section class="report-section">
+        <h3>Users by Role</h3>
+        <p class="section-subtitle">Distribution of users across roles</p>
+
+        @for (role of report.usersByRole; track role._id) {
+        <div class="role-row">
+            <div class="role-info">
+                <span>{{ role._id | titlecase }}</span>
+                <strong>{{ role.count }}</strong>
+            </div>
+
+            <div class="role-track">
+                <div class="role-progress"
+                    [style.width.%]="report.totalUsers ? (role.count / report.totalUsers) * 100 : 0"></div>
+            </div>
+        </div>
+        }
+    </section>
+
+<section class="report-section">
+  <h3>User Registration Trend</h3>
+  <p class="section-subtitle">New user registrations by date</p>
+
+  @if (report.registrationsOverTime.length) {
+    <div class="trend-list">
+      @for (trend of report.registrationsOverTime; track trend._id) {
+        <div class="trend-row">
+          <span class="trend-date">{{ trend._id }}</span>
+
+          <div class="trend-track">
+            <div
+              class="trend-progress"
+             
+[style.width.%]="
+  (trend.count / getMaxRegistrationCount(report.registrationsOverTime)) * 100
+"
+
+            ></div>
+          </div>
+
+          <strong>{{ trend.count }}</strong>
+        </div>
+      }
+    </div>
+  } @else {
+    <p>No registration data available.</p>
+  }
+</section>
+
+    }
+</section>

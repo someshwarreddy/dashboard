@@ -1,6 +1,6 @@
 import { inject, Service } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { CreateProduct, Product, ProductApiResponse, ProductApi,  } from '../models/product';
+import { CreateProduct, Product, ProductApiResponse, ProductApi, } from '../models/product';
 import { HttpClient } from '@angular/common/http';
 @Service()
 export class ProductService {

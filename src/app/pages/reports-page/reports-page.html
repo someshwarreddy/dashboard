@@ -1,1 +1,18 @@
-<p>newreports-page works!</p>
+
+<section class="reports-container">
+  <h2>Reports</h2>
+  <p class="reports-subtitle">
+    Business insights and analytics
+  </p>
+
+  <nav class="reports-nav">
+    <a routerLink="users" routerLinkActive="active">Users</a>
+    <a routerLink="products" routerLinkActive="active">Products</a>
+    <a routerLink="orders" routerLinkActive="active">Orders</a>
+    <a routerLink="sales" routerLinkActive="active">Sales</a>
+  </nav>
+
+  <div class="reports-content">
+    <router-outlet />
+  </div>
+</section>

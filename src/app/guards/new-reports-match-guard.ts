@@ -1,7 +1,6 @@
 import { CanMatchFn } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 export const newReportsMatchGuard: CanMatchFn = () => {
-  const newReportsEnabled = true; // Replace with your actual logic to determine if new reports are enabled
- console.log('NEW REPORTS FEATURE FLAG:', newReportsEnabled);
-  return newReportsEnabled;
+  return environment.features.newReports;
 };

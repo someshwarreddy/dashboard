@@ -19,7 +19,20 @@ export const ADMIN_ROUTES: Routes = [
     canMatch: [newReportsMatchGuard],
     loadComponent: () =>
       import('../pages/reports-page/reports-page')
-        .then(m => m.ReportsPage)
+        .then(m => m.ReportsPage),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'users'
+      },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('../pages/user-reports-page/user-reports-page')
+            .then(m => m.UserReportsPage)
+      }
+    ]
   },
   {
     path: 'oldreports',
