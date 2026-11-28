@@ -9,6 +9,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 import { User } from '../../services/user';
 import { updateUserImage } from '../../store/auth.actions';
+import { NotificationState } from '../../services/notification-state.service';
+
 @Component({
   selector: 'app-dashboard-layout',
   standalone: true,
@@ -17,6 +19,7 @@ import { updateUserImage } from '../../store/auth.actions';
   styleUrl: './dashboard-layout.scss'
 })
 export class DashboardLayout {
+  readonly notificationState = inject(NotificationState);
   uploading = signal(false);
   uploadError = signal('');
   private userService = inject(User);
@@ -43,6 +46,9 @@ export class DashboardLayout {
       : null;
   });
   constructor() {
+  this.notificationState.loadUnreadCount();
+
+  // Keep your existing router event subscription here.
 
     this.router.events
       .pipe(
@@ -118,4 +124,24 @@ export class DashboardLayout {
       }
     });
   }
+  
+toggleNotifications(): void {
+  const urlTree = this.router.parseUrl(this.router.url);
+
+  const isOpen = !!urlTree.root.children['sidebar'];
+
+  if (isOpen) {
+    this.notificationState.requestClose();
+    return;
+  }
+
+  this.router.navigate([
+    {
+      outlets: {
+        sidebar: ['notifications']
+      }
+    }
+  ]);
+}
+
 }

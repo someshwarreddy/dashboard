@@ -25,12 +25,18 @@ export class NotificationService {
   }
 
   // API 3: Mark one notification as read using notification id 
-  markAsRead(id: string): Observable<Notification> {
-    return this.http.patch<Notification>(
-      `${this.apiUrl}/${id}/read`,
-      {}
-    );
-  }
+ markAsRead(id: string): Observable<{
+  message: string;
+  notification: Notification;
+}> {
+  return this.http.patch<{
+    message: string;
+    notification: Notification;
+  }>(
+    `${this.apiUrl}/${id}/read`,
+    {}
+  );
+}
 
   // API 4: Mark all notifications as read
   markAllAsRead(): Observable<{

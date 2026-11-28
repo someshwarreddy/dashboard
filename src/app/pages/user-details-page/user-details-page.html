@@ -14,25 +14,27 @@
 
   <div class="user-details-card">
     <div class="profile-header">
-     <div class="user-avatar">
-  @if (user.image) {
-    <img
-      [src]="'http://localhost:5000' + user.image"
-      [alt]="user.name"
-      (error)="imageFailed.set(true)"
-      [hidden]="imageFailed()"
-    />
-  }
+      <div class="user-avatar">
+        @if (user.image) {
+        <img [src]="'http://localhost:5000' + user.image" [alt]="user.name" (error)="imageFailed.set(true)"
+          [hidden]="imageFailed()" />
+        }
 
-  @if (!user.image || imageFailed()) {
-    <span>{{ getInitials(user.name) }}</span>
-  }
-</div>
+        @if (!user.image || imageFailed()) {
+        <span>{{ getInitials(user.name) }}</span>
+        }
+      </div>
 
-      <div>
+      <div class="profile-info">
         <h3>{{ user.name }}</h3>
         <p>{{ user.role }}</p>
       </div>
+
+      <button type="button"
+       class="btn-notification" 
+      [routerLink]="['/admin/notifications/create', user._id]">
+        Send Notification
+      </button>
     </div>
 
     <div class="details-grid">
