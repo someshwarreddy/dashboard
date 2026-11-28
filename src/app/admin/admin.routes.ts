@@ -45,5 +45,17 @@ export const ADMIN_ROUTES: Routes = [
     loadComponent: () =>
       import('../pages/user-registration/user-registration')
         .then(m => m.UserRegistration)
+  },
+  {
+    path: 'notifications/create/:userId',
+    loadComponent: () =>
+      import('../pages/notification-create-page/notification-create-page')
+        .then(m => m.NotificationCreatePage)
+  },
+  {
+    path: 'settings',
+    loadComponent: () =>
+      import('../pages/settings-page/settings-page')
+        .then(m => m.SettingsPage)
   }
 ];
